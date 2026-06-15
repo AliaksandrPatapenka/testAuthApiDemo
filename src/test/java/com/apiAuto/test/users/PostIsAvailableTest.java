@@ -69,7 +69,7 @@ public class PostIsAvailableTest {
      */
 
     @Nested
-    @DisplayName("UserCrudTest. NegativeTests")
+    @DisplayName("POST /is-available. NegativeTests")
     @Order(2)
     class NegativeTests {
         @Test

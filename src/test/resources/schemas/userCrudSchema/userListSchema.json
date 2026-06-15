@@ -3,13 +3,31 @@
   "items": {
     "type": "object",
     "properties": {
-      "id": { "type": "integer" },
-      "email": { "type": "string" },
-      "password": { "type": "string" },
-      "name": { "type": "string" },
-      "role": { "type": "string" },
-      "avatar": { "type": ["string", "null"] }
+      "id": {
+        "type": "integer"
+      },
+      "email": {
+        "type": "string"
+      },
+      "password": {
+        "type": "string"
+      },
+      "name": {
+        "type": "string"
+      },
+      "role": {
+        "type": "string"
+      },
+      "avatar": {
+        "type": "string"
+      }
     },
-    "required": ["id", "email", "password", "name", "role"]
+    "required": [
+      "id",
+      "email",
+      "password",
+      "name",
+      "role"
+    ]
   }
 }

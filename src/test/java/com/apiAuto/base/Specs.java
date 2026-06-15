@@ -4,6 +4,7 @@ import io.qameta.allure.restassured.AllureRestAssured;
 import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.builder.ResponseSpecBuilder;
+import io.restassured.config.HttpClientConfig;
 import io.restassured.filter.log.LogDetail;
 import io.restassured.specification.RequestSpecification;
 import io.restassured.specification.ResponseSpecification;
@@ -30,6 +31,10 @@ public class Specs {
                 .setContentType("application/json")
                 .log(LogDetail.ALL)
                 .addFilter(allureFilter)
+                .setConfig(RestAssured.config()
+                .httpClient(HttpClientConfig.httpClientConfig()
+                        .setParam("http.connection.timeout", Integer.parseInt(ConfigProperties.get("http.connection.timeout")))
+                        .setParam("http.socket.timeout", Integer.parseInt(ConfigProperties.get("http.socket.timeout")))))
                 .build();
     }
 

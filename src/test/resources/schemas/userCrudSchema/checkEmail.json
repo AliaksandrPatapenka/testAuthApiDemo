@@ -1,7 +1,11 @@
 {
   "type": "object",
   "properties": {
-    "isAvailable": { "type": "boolean" }
+    "isAvailable": {
+      "type": "boolean"
+    }
   },
-  "required": ["isAvailable"]
+  "required": [
+    "isAvailable"
+  ]
 }

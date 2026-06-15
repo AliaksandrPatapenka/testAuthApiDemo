@@ -11,9 +11,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Хранилище данных между тестами через JSON-файл.
- * Извлечение данных в тесте: JsonContext.put("key_in_file", response.path("key_in_json"));
- * Получение данных в тестеЖ
+ * Хранилище данных между тестами через JSON-файл.<br>
+ * Извлечение данных в тесте: JsonContext.put("key_in_file", response.path("key_in_json"));<br>
+ * Получение данных в тесте: JsonContext.put("key_in_file", response.path("key_in_json"));
  */
 public class JsonContext {
     private static final String FILE = "target/data.json";
