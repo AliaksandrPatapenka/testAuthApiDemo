@@ -4,6 +4,7 @@ pipeline {
     tools {
         maven 'maven3'
         jdk 'jdk17'
+        allure 'allure'
     }
 
     stages {
@@ -17,6 +18,12 @@ pipeline {
             steps {
                 sh 'mvn clean test'
             }
+        }
+    }
+
+    post {
+        always {
+            allure includeProperties: false, jdk: '', results: [[path: 'target/allure-results']]
         }
     }
 }
