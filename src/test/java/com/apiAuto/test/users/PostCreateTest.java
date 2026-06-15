@@ -20,20 +20,19 @@ import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInC
 import static org.hamcrest.Matchers.equalTo;
 
 @TestClassOrder(ClassOrderer.OrderAnnotation.class)
-public class UserCrudTest {
+public class PostCreateTest {
 
     /**
      * ==================== ПОЗИТИВНЫЕ ТЕСТЫ ====================
      */
 
     @Nested
-    @DisplayName("UserCrudTest. PositiveTests")
+    @DisplayName("POST /users. PositiveTests")
     @Order(1)
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     class PositiveTests {
 
         @Test
-        @Order(1)
         @DisplayName("Case1: Создание пользователя")
         void userCreate() {
             String timeIndex = TestDataGenerator.timeIndex();
@@ -176,7 +175,7 @@ public class UserCrudTest {
      */
 
     @Nested
-    @DisplayName("UserCrudTest. NegativeTests")
+    @DisplayName("POST /users. NegativeTests")
     @Order(2)
     class NegativeTests {
 
