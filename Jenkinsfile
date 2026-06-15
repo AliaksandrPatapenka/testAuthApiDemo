@@ -5,7 +5,6 @@ pipeline {
         maven 'maven3'
         jdk 'jdk17'
         allure 'allure'
-        allure 'allure'
     }
 
     stages {
@@ -21,17 +20,14 @@ pipeline {
             }
         }
     }
+
     post {
         always {
-            allure results: [[path: 'target/allure-results']]
+            allure([
+                includeProperties: false,
+                jdk: '',
+                results: [[path: 'target/allure-results']]
+            ])
         }
-post {
-    always {
-        allure([
-            includeProperties: false,
-            jdk: '',
-            results: [[path: 'target/allure-results']]
-        ])
     }
-}
 }
