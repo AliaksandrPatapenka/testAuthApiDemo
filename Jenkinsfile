@@ -19,13 +19,20 @@ pipeline {
                 sh 'mvn clean test'
             }
         }
+
+        stage('Allure Report') {
+            steps {
+                allure generate: 'target/allure-results'
+            }
+        }
     }
 
     post {
         always {
-            allure([
-                commandline: 'allure',
-                results: [[path: 'target/allure-results']]
+            publishHTML([
+                reportDir: 'target/site/allure-maven-plugin',
+                reportFiles: 'index.html',
+                reportName: 'Allure Report'
             ])
         }
     }
