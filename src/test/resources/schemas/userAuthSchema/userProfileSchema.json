@@ -1,0 +1,12 @@
+{
+  "type": "object",
+  "properties": {
+    "id": { "type": "integer" },
+    "email": { "type": "string" },
+    "password": { "type": "string" },
+    "name": { "type": "string" },
+    "role": { "type": "string" },
+    "avatar": { "type": "string" }
+  },
+  "required": ["id", "email", "name", "role"]
+}

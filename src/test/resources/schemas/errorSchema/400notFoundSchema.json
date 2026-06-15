@@ -1,0 +1,12 @@
+{
+  "type": "object",
+  "properties": {
+    "statusCode": { "const": 404 },
+    "path": { "type": "string" },
+    "timestamp": { "type": "string" },
+    "name": { "type": "string" },
+    "message": { "type": "string" }
+  },
+  "required": ["path", "timestamp", "name", "message"],
+  "additionalProperties": false
+}

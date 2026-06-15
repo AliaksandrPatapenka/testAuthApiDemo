@@ -1,0 +1,9 @@
+{
+  "type": "object",
+  "properties": {
+    "statusCode": { "const": 401 },
+    "message": { "type": "string" }
+  },
+  "required": ["statusCode", "message"],
+  "additionalProperties": false
+}

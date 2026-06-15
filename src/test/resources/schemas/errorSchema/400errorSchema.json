@@ -1,0 +1,10 @@
+{
+  "type": "object",
+  "properties": {
+    "statusCode": { "const": 400 },
+    "message": { "type": "array", "items": { "type": "string" } },
+    "error": { "type": "string" }
+  },
+  "required": ["statusCode", "message", "error"],
+  "additionalProperties": false
+}

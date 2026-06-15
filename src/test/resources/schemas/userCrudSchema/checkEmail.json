@@ -1,0 +1,7 @@
+{
+  "type": "object",
+  "properties": {
+    "isAvailable": { "type": "boolean" }
+  },
+  "required": ["isAvailable"]
+}

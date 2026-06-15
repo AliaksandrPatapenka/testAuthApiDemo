@@ -1,0 +1,10 @@
+{
+  "type": "object",
+  "properties": {
+    "statusCode": { "const": 404 },
+    "message": { "type": "string" },
+    "error": { "const": "Not Found" }
+  },
+  "required": ["statusCode", "message", "error"],
+  "additionalProperties": false
+}
