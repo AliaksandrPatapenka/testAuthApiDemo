@@ -4,7 +4,7 @@ pipeline {
     tools {
         maven 'maven3'
         jdk 'jdk17'
-        allure 'allure'
+        allure 'allure' // Имя Allure Commandline, которое вы задали в настройках
     }
 
     stages {
@@ -19,21 +19,13 @@ pipeline {
                 sh 'mvn clean test'
             }
         }
-
-        stage('Allure Report') {
-            steps {
-                allure generate: 'target/allure-results'
-            }
-        }
     }
 
+    // Секция post выполнится в любом случае: и при успехе, и при падении тестов
     post {
         always {
-            publishHTML([
-                reportDir: 'target/site/allure-maven-plugin',
-                reportFiles: 'index.html',
-                reportName: 'Allure Report'
-            ])
+            // Эта команда берет сырые данные из target/allure-results и генерирует отчет
+            allure results: [[path: 'target/allure-results']]
         }
     }
 }
