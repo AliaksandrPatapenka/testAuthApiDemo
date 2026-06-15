@@ -4,13 +4,17 @@ pipeline {
     tools {
         maven 'maven3'
         jdk 'jdk17'
-        allure 'allure'
     }
 
     stages {
-        stage('Test') {
+        stage('Checkout') {
             steps {
                 checkout scm
+            }
+        }
+
+        stage('Test') {
+            steps {
                 sh 'mvn clean test'
             }
         }
@@ -18,7 +22,9 @@ pipeline {
 
     post {
         always {
-            allure results: [[path: 'target/allure-results']]
+            allure([
+                results: [[path: 'target/allure-results']]
+            ])
         }
     }
 }
