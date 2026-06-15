@@ -13,9 +13,22 @@ pipeline {
             }
         }
 
-        stage('Test & Report') {
+        stage('Test') {
             steps {
-                sh 'mvn clean test allure:report'
+                script {
+                    try {
+                        sh 'mvn clean test'
+                    } catch (Exception e) {
+                        echo "Тесты упали, но продолжаем..."
+                        currentBuild.result = 'UNSTABLE'
+                    }
+                }
+            }
+        }
+
+        stage('Generate Report') {
+            steps {
+                sh 'mvn allure:report'
             }
         }
     }
