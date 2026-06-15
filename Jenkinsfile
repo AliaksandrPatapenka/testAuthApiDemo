@@ -4,7 +4,6 @@ pipeline {
     tools {
         maven 'maven3'
         jdk 'jdk17'
-        allure 'allure'
     }
 
     stages {
@@ -14,17 +13,9 @@ pipeline {
             }
         }
 
-        stage('Test') {
+        stage('Test & Report') {
             steps {
-                sh 'mvn clean test'
-            }
-        }
-
-        stage('Allure Report') {
-            steps {
-                withAllureEnvironment {
-                    sh 'allure generate target/allure-results --clean -o target/allure-report'
-                }
+                sh 'mvn clean test allure:report'
             }
         }
     }
@@ -33,7 +24,7 @@ pipeline {
         always {
             publishHTML([
                 allowMissing: true,
-                reportDir: 'target/allure-report',
+                reportDir: 'target/site/allure-maven-plugin',
                 reportFiles: 'index.html',
                 reportName: 'Allure Report'
             ])
