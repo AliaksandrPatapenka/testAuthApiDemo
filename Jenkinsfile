@@ -24,6 +24,8 @@ pipeline {
         always {
             publishHTML([
                 allowMissing: true,
+                alwaysLinkToLastBuild: true,
+                keepAll: false,
                 reportDir: 'target/site/allure-maven-plugin',
                 reportFiles: 'index.html',
                 reportName: 'Allure Report'
