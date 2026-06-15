@@ -1,5 +1,5 @@
 pipeline {
-    agent any #запускать на любом доступном агенте (в вашем случае — на самом Jenkins)
+    agent any
 
     tools {
         maven 'maven3'
