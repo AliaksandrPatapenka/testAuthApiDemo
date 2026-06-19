@@ -14,7 +14,7 @@ import static io.restassured.RestAssured.baseURI;
 
 /**
  * Настройки запросов и ответов для RestAssured.
- * Содержит базовый URL, заголовки, фильтр Allure и логирование
+ * Содержит базовый URL, заголовки, фильтр Allure и логирование.
  */
 public class Specs {
     static {
