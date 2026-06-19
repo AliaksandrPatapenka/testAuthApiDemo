@@ -43,6 +43,7 @@ pipeline {
                 reportFiles: 'index.html',
                 reportName: 'Allure Report'
             ])
+            notifyEvents message: 'Build ${env.BUILD_NUMBER} finished with status: ${currentBuild.currentResult}', token: 'h9r3wyymftw__3gqa-qoqfpvjbevl_cw'
         }
     }
 }
