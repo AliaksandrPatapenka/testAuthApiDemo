@@ -19,7 +19,7 @@ public class GetProfileTest {
      *
      */
     @Nested
-    @DisplayName("GET /Profile. PositiveTests")
+    @DisplayName("GET /Profile. Positive Tests")
     @Order(1)
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     public class PositiveTests {
@@ -50,7 +50,7 @@ public class GetProfileTest {
      * ==================== НЕГАТИВНЫЕ ТЕСТЫ ====================
      */
     @Nested
-    @DisplayName("GET /Profile. NegativeTests")
+    @DisplayName("GET /Profile. Negative Tests")
     @Order(2)
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     public class NegativeTests {
