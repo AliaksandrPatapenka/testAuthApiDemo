@@ -10,7 +10,16 @@ pipeline {
         stage('Start') {
             steps {
                 script {
-                    notifyEvents message: "🚀 Сборка #${env.BUILD_NUMBER} запущена", token: 'h9r3wyymftw__3gqa-qoqfpvjbevl_cw'
+                    withCredentials([
+                        string(credentialsId: 'telegram-token', variable: 'TOKEN')
+                    ]) {
+                        sh """
+                            curl -s -X POST "https://api.telegram.org/bot${TOKEN}/sendMessage" \
+                            -d "chat_id=-1004366972797" \
+                            -d "text=🚀 Сборка #${BUILD_NUMBER} [${JOB_NAME}] запущена! Ссылка: ${BUILD_URL}" \
+                            -d "parse_mode=HTML"
+                        """
+                    }
                 }
             }
         }
@@ -51,10 +60,50 @@ pipeline {
                 reportFiles: 'index.html',
                 reportName: 'Allure Report'
             ])
+        }
 
+        success {
             script {
-                def status = currentBuild.currentResult
-                notifyEvents message: "🏁 Сборка #${env.BUILD_NUMBER} завершена со статусом: ${status}", token: 'h9r3wyymftw__3gqa-qoqfpvjbevl_cw'
+                withCredentials([
+                    string(credentialsId: 'telegram-token', variable: 'TOKEN')
+                ]) {
+                    sh """
+                        curl -s -X POST "https://api.telegram.org/bot${TOKEN}/sendMessage" \
+                        -d "chat_id=-1004366972797" \
+                        -d "text=✅ Сборка #${BUILD_NUMBER} [${JOB_NAME}] УСПЕШНА! Отчёт: <a href='${BUILD_URL}Allure_20Report/'>Allure Report</a>" \
+                        -d "parse_mode=HTML"
+                    """
+                }
+            }
+        }
+
+        failure {
+            script {
+                withCredentials([
+                    string(credentialsId: 'telegram-token', variable: 'TOKEN')
+                ]) {
+                    sh """
+                        curl -s -X POST "https://api.telegram.org/bot${TOKEN}/sendMessage" \
+                        -d "chat_id=-1004366972797" \
+                        -d "text=❌ Сборка #${BUILD_NUMBER} [${JOB_NAME}] ПРОВАЛЕНА! Логи: <a href='${BUILD_URL}console'>Console</a>" \
+                        -d "parse_mode=HTML"
+                    """
+                }
+            }
+        }
+
+        unstable {
+            script {
+                withCredentials([
+                    string(credentialsId: 'telegram-token', variable: 'TOKEN')
+                ]) {
+                    sh """
+                        curl -s -X POST "https://api.telegram.org/bot${TOKEN}/sendMessage" \
+                        -d "chat_id=-1004366972797" \
+                        -d "text=⚠️ Сборка #${BUILD_NUMBER} [${JOB_NAME}] НЕСТАБИЛЬНА (тесты упали)! Отчёт: <a href='${BUILD_URL}Allure_20Report/'>Allure Report</a>" \
+                        -d "parse_mode=HTML"
+                    """
+                }
             }
         }
     }
