@@ -66,7 +66,7 @@ pipeline {
                     sh """
                         curl -s -X POST "https://api.telegram.org/bot${TOKEN}/sendMessage" \
                         -d "chat_id=-1004366972797" \
-                        -d "text=✅ Сборка #${BUILD_NUMBER} [${JOB_NAME}] УСПЕШНА! Отчёт: <a href='${BUILD_URL}Allure_20Report/'>Allure Report</a>" \
+                        -d "text=✅ Сборка #${BUILD_NUMBER} [${JOB_NAME}] УСПЕШНА!" \
                         -d "parse_mode=HTML"
                     """
                 }
@@ -79,7 +79,7 @@ pipeline {
                     sh """
                         curl -s -X POST "https://api.telegram.org/bot${TOKEN}/sendMessage" \
                         -d "chat_id=-1004366972797" \
-                        -d "text=❌ Сборка #${BUILD_NUMBER} [${JOB_NAME}] ПРОВАЛЕНА! Логи: <a href='${BUILD_URL}console'>Console</a>" \
+                        -d "text=❌ Сборка #${BUILD_NUMBER} [${JOB_NAME}] ПРОВАЛЕНА!" \
                         -d "parse_mode=HTML"
                     """
                 }
@@ -92,7 +92,7 @@ pipeline {
                     sh """
                         curl -s -X POST "https://api.telegram.org/bot${TOKEN}/sendMessage" \
                         -d "chat_id=-1004366972797" \
-                        -d "text=⚠️ Сборка #${BUILD_NUMBER} [${JOB_NAME}] НЕСТАБИЛЬНА (тесты упали)! Отчёт: <a href='${BUILD_URL}Allure_20Report/'>Allure Report</a>" \
+                        -d "text=⚠️ Сборка #${BUILD_NUMBER} [${JOB_NAME}] НЕСТАБИЛЬНА (тесты упали)!" \
                         -d "parse_mode=HTML"
                     """
                 }
