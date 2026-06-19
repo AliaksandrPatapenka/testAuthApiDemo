@@ -7,6 +7,14 @@ pipeline {
     }
 
     stages {
+        stage('Start') {
+            steps {
+                script {
+                    notifyEvents message: "🚀 Сборка #${env.BUILD_NUMBER} запущена", token: 'h9r3wyymftw__3gqa-qoqfpvjbevl_cw'
+                }
+            }
+        }
+
         stage('Checkout') {
             steps {
                 checkout scm
@@ -43,7 +51,11 @@ pipeline {
                 reportFiles: 'index.html',
                 reportName: 'Allure Report'
             ])
-            notifyEvents message: 'Build ${env.BUILD_NUMBER} finished with status: ${currentBuild.currentResult}', token: 'h9r3wyymftw__3gqa-qoqfpvjbevl_cw'
+
+            script {
+                def status = currentBuild.currentResult
+                notifyEvents message: "🏁 Сборка #${env.BUILD_NUMBER} завершена со статусом: ${status}", token: 'h9r3wyymftw__3gqa-qoqfpvjbevl_cw'
+            }
         }
     }
 }
