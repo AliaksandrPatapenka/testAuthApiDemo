@@ -6,19 +6,31 @@ import java.util.Properties;
 public class ConfigProperties {
     private static final Properties props = new Properties();
 
-
     static {
+        // 1. Загружаем файл config.properties
         try (InputStream in = ConfigProperties.class.getClassLoader().getResourceAsStream("config.properties")) {
             props.load(in);
         } catch (Exception e) {
             throw new RuntimeException("config.properties not found", e);
         }
-    } //Загружает конфигурацию из файла config.properties в папке resources.
+
+        // 2. Переопределяем значения, если они переданы из Jenkins
+        overrideFromSystemProperties();
+    }
 
     /**
-     * Возвращает значение key ключ из .properties файла
-     * Значение или null, если ключ не найден
+     * Если в JVM передан параметр -Dbase.uri=... — он заменяет значение из файла
      */
+    private static void overrideFromSystemProperties() {
+        String[] keys = {"base.uri", "base.path", "user.email", "user.password"};
+        for (String key : keys) {
+            String value = System.getProperty(key);
+            if (value != null && !value.isEmpty()) {
+                props.setProperty(key, value);
+            }
+        }
+    }
+
     public static String get(String key) {
         return props.getProperty(key);
     }
