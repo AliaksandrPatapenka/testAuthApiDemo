@@ -37,6 +37,7 @@ pipeline {
 
                         // Allure report (даже если тесты упали)
                         sh 'mvn allure:report'
+                        sh 'mvn allure:report1111'
 
                         // Если тесты упали — отправляем одно сообщение о нестабильности
                         if (testsFailed) {
