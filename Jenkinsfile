@@ -9,9 +9,10 @@ pipeline {
         choice(name: 'TEST_SUITE', choices: ['all', 'auth', 'users'], description: 'Пакет тестов. По умолчанию "all"')
         string(name: 'base.uri', defaultValue: 'https://api.escuelajs.co', description: 'Базовый URL API')
         string(name: 'base.path', defaultValue: '/api/v1', description: 'Базовый путь API')
-        string(name: 'user.email', defaultValue: 'john@mail.com', description: 'Email для авторизации')
-        password(name: 'user.password', defaultValue: 'changeme', description: 'Пароль для авторизации')
+        string(name: 'user.email', defaultValue: 'john@mail.com', description: 'Email пользователя для авторизации')
+        password(name: 'user.password', defaultValue: 'changeme', description: 'Пароль пользователя для авторизации')
     }
+
 
     // ====================================================
     // 2. ИНСТРУМЕНТЫ (Maven и Java)
@@ -20,6 +21,7 @@ pipeline {
         maven 'maven3'
         jdk 'jdk21'
     }
+
 
     // ====================================================
     // 3. ОСНОВНАЯ ЛОГИКА СБОРКИ
@@ -30,6 +32,7 @@ pipeline {
                 script {
                     def buildUrl = "http://localhost:8080/job/${JOB_NAME}/${BUILD_NUMBER}/"
                     boolean testsFailed = false
+
 
                     try {
                         // --------------------------------------------
@@ -44,17 +47,19 @@ pipeline {
                             """
                         }
 
+
                         // --------------------------------------------
                         // 3.2. Клонирование ВЫБРАННОЙ ВЕТКИ
                         // --------------------------------------------
                         git branch: "${params.BRANCH_NAME}",
                             url: 'https://github.com/AliaksandrPatapenka/testAuthApiDemo'
 
+
                         // --------------------------------------------
                         // 3.3. ЗАПУСК ТЕСТОВ с параметрами
                         // --------------------------------------------
                         try {
-                            def testPattern = params.TEST_SUITE == 'all' ? '' : params.TEST_SUITE
+                            def testPattern = params.TEST_SUITE == 'all' ? '' : params.TEST_SUITE + '.*'
                             sh """
                                 mvn clean test \
                                 -Dbase.uri=${params.'base.uri'} \
@@ -67,6 +72,7 @@ pipeline {
                             testsFailed = true
                             currentBuild.result = 'UNSTABLE'
                         }
+
 
                         // --------------------------------------------
                         // 3.4. Генерация ALLURE-ОТЧЁТА
@@ -89,6 +95,7 @@ pipeline {
                         throw e
                     }
 
+
                     // --------------------------------------------
                     // 3.6. ИТОГОВОЕ сообщение (УСПЕШНА / НЕСТАБИЛЬНА)
                     // --------------------------------------------
@@ -105,6 +112,7 @@ pipeline {
             }
         }
     }
+
 
     // ====================================================
     // 4. ДЕЙСТВИЯ ПОСЛЕ СБОРКИ (всегда)
