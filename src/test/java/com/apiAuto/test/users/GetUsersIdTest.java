@@ -10,6 +10,7 @@ import static com.apiAuto.base.Specs.responseSpec;
 import static io.restassured.RestAssured.given;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 import static org.hamcrest.Matchers.equalTo;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
 @TestClassOrder(ClassOrderer.OrderAnnotation.class)
@@ -39,6 +40,7 @@ public class GetUsersIdTest {
                     .statusCode(200)
                     .body("email", equalTo(userEmail))
                     .body(matchesJsonSchemaInClasspath("schemas/userCrudSchema/userSingleSchema.json"));
+            assertEquals(1, 2);
         }
     }
 

@@ -61,8 +61,6 @@ pipeline {
                                 -d "parse_mode=HTML"
                             """
                         }
-
-                        // Пробрасываем исключение дальше, чтобы Jenkins показал красный статус
                         throw e
                     }
                 }
@@ -89,7 +87,7 @@ pipeline {
                     sh """
                         curl -s -X POST "https://api.telegram.org/bot${TOKEN}/sendMessage" \
                         -d "chat_id=-1004366972797" \
-                        -d "text=⚠️ Сборка #${BUILD_NUMBER} [${JOB_NAME}] НЕСТАБИЛЬНА (тесты упали). Ссылка: <code>${buildUrl}</code>" \
+                        -d "text=⚠️ Сборка #${BUILD_NUMBER} [${JOB_NAME}] Тесты УПАЛИ. Ссылка: <code>${buildUrl}</code>" \
                         -d "parse_mode=HTML"
                     """
                 }
