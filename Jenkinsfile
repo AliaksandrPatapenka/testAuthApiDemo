@@ -37,7 +37,7 @@ pipeline {
 
                         // Allure report
                         sh 'mvn allure:report'
-                        sh 'несуществующая_команда'
+                        sh 'несуществующая_команда '
 
                         // ---- УСПЕШНО ----
                         withCredentials([string(credentialsId: 'telegram-token', variable: 'TOKEN')]) {
