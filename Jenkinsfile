@@ -1,20 +1,29 @@
 pipeline {
     agent any
 
+    // ====================================================
+    // 1. ПАРАМЕТРЫ СБОРКИ (что видно при запуске)
+    // ====================================================
     parameters {
-        string(name: 'BRANCH_NAME', defaultValue: 'master', description: 'Введите название ветки для сборки')
+        string(name: 'BRANCH_NAME', defaultValue: 'master', description: 'Название ветки. По умолчанию "master"')
         choice(name: 'TEST_SUITE', choices: ['all', 'auth.*', 'users.*'], description: 'Пакет тестов. По умолчанию "all"')
-        string(name: 'base.uri', defaultValue: 'https://api.escuelajs.co', description: 'Базовый URL API. По умолчанию "https://api.escuelajs.co"')
-        string(name: 'base.path', defaultValue: '/api/v1', description: 'Базовый путь API. По умолчанию "/api/v1"')
-        string(name: 'user.email', defaultValue: 'john@mail.com', description: 'Email для авторизации. По умолчанию "user.email"')
+        string(name: 'base.uri', defaultValue: 'https://api.escuelajs.co', description: 'Базовый URL API')
+        string(name: 'base.path', defaultValue: '/api/v1', description: 'Базовый путь API')
+        string(name: 'user.email', defaultValue: 'john@mail.com', description: 'Email для авторизации')
         password(name: 'user.password', defaultValue: 'changeme', description: 'Пароль для авторизации')
     }
 
+    // ====================================================
+    // 2. ИНСТРУМЕНТЫ (Maven и Java)
+    // ====================================================
     tools {
         maven 'maven3'
         jdk 'jdk21'
     }
 
+    // ====================================================
+    // 3. ОСНОВНАЯ ЛОГИКА СБОРКИ
+    // ====================================================
     stages {
         stage('Run') {
             steps {
@@ -23,6 +32,9 @@ pipeline {
                     boolean testsFailed = false
 
                     try {
+                        // --------------------------------------------
+                        // 3.1. Уведомление о СТАРТЕ сборки
+                        // --------------------------------------------
                         withCredentials([string(credentialsId: 'telegram-token', variable: 'TOKEN')]) {
                             sh """
                                 curl -s -X POST "https://api.telegram.org/bot${TOKEN}/sendMessage" \
@@ -32,13 +44,17 @@ pipeline {
                             """
                         }
 
-                        script {
-                                    git branch: "${params.BRANCH_NAME}",
-                                        url: 'https://github.com/AliaksandrPatapenka/testAuthApiDemo'
-                                }
+                        // --------------------------------------------
+                        // 3.2. Клонирование ВЫБРАННОЙ ВЕТКИ
+                        // --------------------------------------------
+                        git branch: "${params.BRANCH_NAME}",
+                            url: 'https://github.com/AliaksandrPatapenka/testAuthApiDemo'
 
+                        // --------------------------------------------
+                        // 3.3. ЗАПУСК ТЕСТОВ с параметрами
+                        // --------------------------------------------
                         try {
-                            def testPattern = params.TEST_SUITE == 'all' ? '' : params.TEST_SUITE + '.*'
+                            def testPattern = params.TEST_SUITE == 'all' ? '' : params.TEST_SUITE
                             sh """
                                 mvn clean test \
                                 -Dbase.uri=${params.'base.uri'} \
@@ -52,9 +68,15 @@ pipeline {
                             currentBuild.result = 'UNSTABLE'
                         }
 
+                        // --------------------------------------------
+                        // 3.4. Генерация ALLURE-ОТЧЁТА
+                        // --------------------------------------------
                         sh 'mvn allure:report'
 
                     } catch (Exception e) {
+                        // --------------------------------------------
+                        // 3.5. Если сборка УПАЛА (ошибка в пайплайне)
+                        // --------------------------------------------
                         currentBuild.result = 'FAILURE'
                         withCredentials([string(credentialsId: 'telegram-token', variable: 'TOKEN')]) {
                             sh """
@@ -67,6 +89,9 @@ pipeline {
                         throw e
                     }
 
+                    // --------------------------------------------
+                    // 3.6. ИТОГОВОЕ сообщение (УСПЕШНА / НЕСТАБИЛЬНА)
+                    // --------------------------------------------
                     withCredentials([string(credentialsId: 'telegram-token', variable: 'TOKEN')]) {
                         def statusText = testsFailed ? "⚠️ НЕСТАБИЛЬНА (тесты упали)" : "✅ УСПЕШНА"
                         sh """
@@ -81,6 +106,9 @@ pipeline {
         }
     }
 
+    // ====================================================
+    // 4. ДЕЙСТВИЯ ПОСЛЕ СБОРКИ (всегда)
+    // ====================================================
     post {
         always {
             publishHTML([
