@@ -15,7 +15,7 @@ pipeline {
                         sh """
                             curl -s -X POST "https://api.telegram.org/bot${TOKEN}/sendMessage" \
                             -d "chat_id=-1004366972797" \
-                            -d "text=🚀 Сборка #${BUILD_NUMBER} [${JOB_NAME}] запущена. Ссылка: http://localhost:8080/${buildUrl}" \
+                            -d "text=🚀 Сборка #${BUILD_NUMBER} [${JOB_NAME}] запущена. <a href='${buildUrl}'>Ссылка на сборку</a>" \
                             -d "parse_mode=HTML"
                         """
                     }
@@ -68,7 +68,7 @@ pipeline {
                     sh """
                         curl -s -X POST "https://api.telegram.org/bot${TOKEN}/sendMessage" \
                         -d "chat_id=-1004366972797" \
-                        -d "text=✅ Сборка #${BUILD_NUMBER} [${JOB_NAME}] УСПЕШНА. Ссылка: http://localhost:8080/${buildUrl}" \
+                        -d "text=✅ Сборка #${BUILD_NUMBER} [${JOB_NAME}] УСПЕШНА. Ссылка: <a href='${buildUrl}'>Ссылка на сборку</a>" \
                         -d "parse_mode=HTML"
                     """
                 }
@@ -82,7 +82,7 @@ pipeline {
                     sh """
                         curl -s -X POST "https://api.telegram.org/bot${TOKEN}/sendMessage" \
                         -d "chat_id=-1004366972797" \
-                        -d "text=❌ Сборка #${BUILD_NUMBER} [${JOB_NAME}] ПРОВАЛЕНА! Ссылка: http://localhost:8080/${buildUrl}"  \
+                        -d "text=❌ Сборка #${BUILD_NUMBER} [${JOB_NAME}] УПАЛА! <a href='${buildUrl}'>Ссылка на сборку</a>"  \
                         -d "parse_mode=HTML"
                     """
                 }
@@ -96,7 +96,7 @@ pipeline {
                     sh """
                         curl -s -X POST "https://api.telegram.org/bot${TOKEN}/sendMessage" \
                         -d "chat_id=-1004366972797" \
-                        -d "text=⚠️ Сборка #${BUILD_NUMBER} [${JOB_NAME}] НЕСТАБИЛЬНА (тесты упали). Ссылка: http://localhost:8080/${buildUrl}" \
+                        -d "text=⚠️ Сборка #${BUILD_NUMBER} [${JOB_NAME}] Тесты УПАЛИ. <a href='${buildUrl}'>Ссылка на сборку</a>" \
                         -d "parse_mode=HTML"
                     """
                 }
