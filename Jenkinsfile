@@ -12,17 +12,11 @@ pipeline {
             script {
                 def buildUrl = "http://localhost:8080/job/${JOB_NAME}/${BUILD_NUMBER}/"
                 withCredentials([string(credentialsId: 'telegram-token', variable: 'TOKEN')]) {
-                    echo "=== ОТПРАВКА В TELEGRAM ==="
-                    echo "Текст: 🚀 Сборка #${BUILD_NUMBER} [${JOB_NAME}] запущена. <a href='${buildUrl}'>Ссылка на сборку</a>"
-                    echo "parse_mode: HTML"
-                    def response = sh(script: """
+                    sh """
                         curl -s -X POST "https://api.telegram.org/bot${TOKEN}/sendMessage" \
                         -d "chat_id=-1004366972797" \
-                        -d "text=🚀 Сборка #${BUILD_NUMBER} [${JOB_NAME}] запущена. <a href='${buildUrl}'>Ссылка на сборку</a>" \
-                        -d "parse_mode=HTML"
-                    """, returnStdout: true).trim()
-                    echo "=== ОТВЕТ TELEGRAM API ==="
-                    echo response
+                        -d "text=🚀 Сборка #${BUILD_NUMBER} [${JOB_NAME}] запущена. Ссылка на сборку: ${buildUrl} | Работа: https://hh.ru/"
+                    """
                 }
             }
         }
