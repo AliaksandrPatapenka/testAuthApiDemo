@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     parameters {
-        choice(name: 'TEST_SUITE', choices: ['all', 'com.apiAuto.test.auth', 'com.apiAuto.test.users'], description: 'Пакет тестов. По умолчанию "all"')
+        choice(name: 'TEST_SUITE', choices: ['all', 'auth.*', 'users.*'], description: 'Пакет тестов. По умолчанию "all"')
         string(name: 'base.uri', defaultValue: 'https://api.escuelajs.co', description: 'Базовый URL API')
         string(name: 'base.path', defaultValue: '/api/v1', description: 'Базовый путь API')
         string(name: 'user.email', defaultValue: 'john@mail.com', description: 'Email для авторизации')
