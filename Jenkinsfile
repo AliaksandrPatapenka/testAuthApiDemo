@@ -26,55 +26,37 @@ pipeline {
 
                         checkout scm
 
-                        // Тесты с перехватом ошибок
                         try {
                             sh 'mvn clean test'
                         } catch (Exception e) {
                             testsFailed = true
-                            echo "Тесты упали, но продолжаем..."
                             currentBuild.result = 'UNSTABLE'
                         }
 
-                        // Allure report (даже если тесты упали)
                         sh 'mvn allure:report'
 
-
-                        // Если тесты упали — отправляем одно сообщение о нестабильности
-                        if (testsFailed) {
-                            withCredentials([string(credentialsId: 'telegram-token', variable: 'TOKEN')]) {
-                                sh """
-                                    curl -s -X POST "https://api.telegram.org/bot${TOKEN}/sendMessage" \
-                                    -d "chat_id=-1004366972797" \
-                                    -d "text=⚠️ Сборка #${BUILD_NUMBER} [${JOB_NAME}] НЕСТАБИЛЬНА (тесты упали). Ссылка: <code>${buildUrl}</code>" \
-                                    -d "parse_mode=HTML"
-                                """
-                            }
-                        } else {
-                            // Всё успешно
-                            withCredentials([string(credentialsId: 'telegram-token', variable: 'TOKEN')]) {
-                                sh """
-                                    curl -s -X POST "https://api.telegram.org/bot${TOKEN}/sendMessage" \
-                                    -d "chat_id=-1004366972797" \
-                                    -d "text=✅ Сборка #${BUILD_NUMBER} [${JOB_NAME}] УСПЕШНА. Ссылка: <code>${buildUrl}</code>" \
-                                    -d "parse_mode=HTML"
-                                """
-                            }
-                        }
-
                     } catch (Exception e) {
-                        // Любая другая ошибка (падение сборки)
                         currentBuild.result = 'FAILURE'
-                        echo "Сборка упала: ${e.message}"
-
                         withCredentials([string(credentialsId: 'telegram-token', variable: 'TOKEN')]) {
                             sh """
                                 curl -s -X POST "https://api.telegram.org/bot${TOKEN}/sendMessage" \
                                 -d "chat_id=-1004366972797" \
-                                -d "text=❌ Сборка #${BUILD_NUMBER} [${JOB_NAME}] УПАЛА! Ошибка: ${e.message}. Ссылка: <code>${buildUrl}</code>" \
+                                -d "text=❌ Сборка #${BUILD_NUMBER} [${JOB_NAME}] УПАЛА! Ссылка: <code>${buildUrl}</code>" \
                                 -d "parse_mode=HTML"
                             """
                         }
                         throw e
+                    }
+
+                    // Отправка итогового сообщения
+                    withCredentials([string(credentialsId: 'telegram-token', variable: 'TOKEN')]) {
+                        def statusText = testsFailed ? "⚠️ НЕСТАБИЛЬНА (тесты упали)" : "✅ УСПЕШНА"
+                        sh """
+                            curl -s -X POST "https://api.telegram.org/bot${TOKEN}/sendMessage" \
+                            -d "chat_id=-1004366972797" \
+                            -d "text=${statusText}. Сборка #${BUILD_NUMBER} [${JOB_NAME}]. Ссылка: <code>${buildUrl}</code>" \
+                            -d "parse_mode=HTML"
+                        """
                     }
                 }
             }
