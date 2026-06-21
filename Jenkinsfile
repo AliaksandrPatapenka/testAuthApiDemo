@@ -12,6 +12,7 @@ pipeline {
             script {
                 def buildUrl = "http://localhost:8080/job/${JOB_NAME}/${BUILD_NUMBER}/"
                 withCredentials([string(credentialsId: 'telegram-token', variable: 'TOKEN')]) {
+                echo "Отправляем в Telegram: 🚀 Сборка #${BUILD_NUMBER} [${JOB_NAME}] запущена. Ссылка: ${buildUrl}"
                     sh """
                         curl -s -X POST "https://api.telegram.org/bot${TOKEN}/sendMessage" \
                         -d "chat_id=-1004366972797" \
