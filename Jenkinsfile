@@ -34,7 +34,6 @@ pipeline {
                         }
 
                         sh 'mvn allure:report'
-                        sh '111'
 
                     } catch (Exception e) {
                         currentBuild.result = 'FAILURE'
