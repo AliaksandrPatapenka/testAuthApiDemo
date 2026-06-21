@@ -10,12 +10,11 @@ pipeline {
         stage('Start') {
             steps {
                 script {
-                def buildUrl = currentBuild.rawBuild.getUrl()
-                withCredentials([string(credentialsId: 'telegram-token', variable: 'TOKEN')]) {
+                    withCredentials([string(credentialsId: 'telegram-token', variable: 'TOKEN')]) {
                         sh """
                             curl -s -X POST "https://api.telegram.org/bot${TOKEN}/sendMessage" \
                             -d "chat_id=-1004366972797" \
-                            -d "text=🚀 Сборка #${BUILD_NUMBER} [${JOB_NAME}] запущена. <a href='${buildUrl}'>Ссылка на сборку</a>" \
+                            -d "text=🚀 Сборка #${BUILD_NUMBER} [${JOB_NAME}] запущена. <a href='${env.BUILD_URL}'>Ссылка на сборку</a>" \
                             -d "parse_mode=HTML"
                         """
                     }
@@ -63,12 +62,11 @@ pipeline {
 
         success {
             script {
-            def buildUrl = currentBuild.rawBuild.getUrl()
                 withCredentials([string(credentialsId: 'telegram-token', variable: 'TOKEN')]) {
                     sh """
                         curl -s -X POST "https://api.telegram.org/bot${TOKEN}/sendMessage" \
                         -d "chat_id=-1004366972797" \
-                        -d "text=✅ Сборка #${BUILD_NUMBER} [${JOB_NAME}] УСПЕШНА. Ссылка: <a href='${buildUrl}'>Ссылка на сборку</a>" \
+                        -d "text=✅ Сборка #${BUILD_NUMBER} [${JOB_NAME}] УСПЕШНА. Ссылка: <a href='${env.BUILD_URL}'>Ссылка на сборку</a>" \
                         -d "parse_mode=HTML"
                     """
                 }
@@ -77,12 +75,11 @@ pipeline {
 
         failure {
             script {
-            def buildUrl = currentBuild.rawBuild.getUrl()
                 withCredentials([string(credentialsId: 'telegram-token', variable: 'TOKEN')]) {
                     sh """
                         curl -s -X POST "https://api.telegram.org/bot${TOKEN}/sendMessage" \
                         -d "chat_id=-1004366972797" \
-                        -d "text=❌ Сборка #${BUILD_NUMBER} [${JOB_NAME}] УПАЛА! <a href='${buildUrl}'>Ссылка на сборку</a>"  \
+                        -d "text=❌ Сборка #${BUILD_NUMBER} [${JOB_NAME}] УПАЛА! <a href='${env.BUILD_URL}'>Ссылка на сборку</a>" \
                         -d "parse_mode=HTML"
                     """
                 }
@@ -91,12 +88,11 @@ pipeline {
 
         unstable {
             script {
-            def buildUrl = currentBuild.rawBuild.getUrl()
                 withCredentials([string(credentialsId: 'telegram-token', variable: 'TOKEN')]) {
                     sh """
                         curl -s -X POST "https://api.telegram.org/bot${TOKEN}/sendMessage" \
                         -d "chat_id=-1004366972797" \
-                        -d "text=⚠️ Сборка #${BUILD_NUMBER} [${JOB_NAME}] Тесты УПАЛИ. <a href='${buildUrl}'>Ссылка на сборку</a>" \
+                        -d "text=⚠️ Сборка #${BUILD_NUMBER} [${JOB_NAME}] НЕСТАБИЛЬНА (тесты упали). <a href='${env.BUILD_URL}'>Ссылка на сборку</a>" \
                         -d "parse_mode=HTML"
                     """
                 }
