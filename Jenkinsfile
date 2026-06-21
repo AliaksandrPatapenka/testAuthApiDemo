@@ -10,17 +10,12 @@ pipeline {
         stage('Start') {
             steps {
                 script {
-                    def baseUrl = "http://localhost:8080/"
-                    def buildUrl = baseUrl + currentBuild.rawBuild.getUrl()
-                                echo "buildUrl = ${buildUrl}"
-
-
+                    def buildUrl = "http://localhost:8080/job/${JOB_NAME}/${BUILD_NUMBER}/"
                     withCredentials([string(credentialsId: 'telegram-token', variable: 'TOKEN')]) {
                         sh """
                             curl -s -X POST "https://api.telegram.org/bot${TOKEN}/sendMessage" \
                             -d "chat_id=-1004366972797" \
-                            -d "text=🚀 Сборка #${BUILD_NUMBER} [${JOB_NAME}] запущена. <a href='${buildUrl}'>Ссылка на сборку</a>" \
-                            -d "parse_mode=HTML"
+                            -d "text=🚀 Сборка #${BUILD_NUMBER} [${JOB_NAME}] запущена. Ссылка: ${buildUrl}"
                         """
                     }
                 }
