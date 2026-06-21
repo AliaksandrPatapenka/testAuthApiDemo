@@ -2,6 +2,7 @@ pipeline {
     agent any
 
     parameters {
+        choice(name: 'TEST_SUITE', choices: ['all', 'users', 'auth', 'smoke'], description: 'Пакет тестов')
         string(name: 'BASE_URI', defaultValue: 'https://api.escuelajs.co', description: 'Базовый URL API. По дефолту https://api.escuelajs.co')
         string(name: 'BASE_PATH', defaultValue: '/api/v1', description: 'Базовый путь API. По дефолту /api/v1')
         string(name: 'USER_EMAIL', defaultValue: 'john@mail.com', description: 'Email для авторизации. По дефолту john@mail.com')
@@ -41,6 +42,8 @@ pipeline {
                                 -Dbase.path=${params.BASE_PATH} \
                                 -Duser.email=${params.USER_EMAIL} \
                                 -Duser.password=${params.USER_PASSWORD}
+                                -Dtest=${params.TEST_SUITE == 'all' ? '' : params.TEST_SUITE + '.*'}
+
                             """
                         } catch (Exception e) {
                             testsFailed = true
