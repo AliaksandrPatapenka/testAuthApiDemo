@@ -1,6 +1,13 @@
 pipeline {
     agent any
 
+    parameters {
+        string(name: 'BASE_URI', defaultValue: 'https://api.escuelajs.co', description: 'Базовый URL API')
+        string(name: 'BASE_PATH', defaultValue: '/api/v1', description: 'Базовый путь API')
+        string(name: 'USER_EMAIL', defaultValue: 'john@mail.com', description: 'Email для авторизации')
+        password(name: 'USER_PASSWORD', defaultValue: 'changeme', description: 'Пароль для авторизации')
+    }
+
     tools {
         maven 'maven3'
         jdk 'jdk21'
@@ -26,8 +33,15 @@ pipeline {
 
                         checkout scm
 
+                        // Тесты с параметрами из Jenkins
                         try {
-                            sh 'mvn clean test'
+                            sh """
+                                mvn clean test \
+                                -Dbase.uri=${params.BASE_URI} \
+                                -Dbase.path=${params.BASE_PATH} \
+                                -Duser.email=${params.USER_EMAIL} \
+                                -Duser.password=${params.USER_PASSWORD}
+                            """
                         } catch (Exception e) {
                             testsFailed = true
                             currentBuild.result = 'UNSTABLE'
@@ -75,32 +89,4 @@ pipeline {
             ])
         }
     }
-
-        parameters {
-            string(name: 'BASE_URI', defaultValue: 'https://api.escuelajs.co', description: 'Базовый URL API')
-            string(name: 'BASE_PATH', defaultValue: '/api/v1', description: 'Базовый путь API')
-            string(name: 'USER_EMAIL', defaultValue: 'john@mail.com', description: 'Email для авторизации')
-            password(name: 'USER_PASSWORD', defaultValue: 'changeme', description: 'Пароль для авторизации')
-        }
-
-        tools {
-            maven 'maven3'
-            jdk 'jdk21'
-        }
-
-        stages {
-            stage('Run') {
-                steps {
-                    script {
-                        sh """
-                            mvn clean test \
-                            -Dbase.uri=${params.BASE_URI} \
-                            -Dbase.path=${params.BASE_PATH} \
-                            -Duser.email=${params.USER_EMAIL} \
-                            -Duser.password=${params.USER_PASSWORD}
-                        """
-                    }
-                }
-            }
-        }
 }
