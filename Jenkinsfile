@@ -10,10 +10,10 @@ pipeline {
         stage('Run') {
             steps {
                 script {
-                    try {
-                        // ---- ТВОЙ ОСНОВНОЙ КОД ----
-                        def buildUrl = "http://localhost:8080/job/${JOB_NAME}/${BUILD_NUMBER}/"
+                    def buildUrl = "http://localhost:8080/job/${JOB_NAME}/${BUILD_NUMBER}/"
+                    boolean testsFailed = false
 
+                    try {
                         // Уведомление о старте
                         withCredentials([string(credentialsId: 'telegram-token', variable: 'TOKEN')]) {
                             sh """
@@ -24,33 +24,44 @@ pipeline {
                             """
                         }
 
-                        // Checkout
                         checkout scm
 
-                        // Test
+                        // Тесты с перехватом ошибок
                         try {
                             sh 'mvn clean test'
                         } catch (Exception e) {
+                            testsFailed = true
                             echo "Тесты упали, но продолжаем..."
                             currentBuild.result = 'UNSTABLE'
                         }
 
-                        // Allure report
+                        // Allure report (даже если тесты упали)
                         sh 'mvn allure:report'
-                        sh 'несуществующая_команда '
 
-                        // ---- УСПЕШНО ----
-                        withCredentials([string(credentialsId: 'telegram-token', variable: 'TOKEN')]) {
-                            sh """
-                                curl -s -X POST "https://api.telegram.org/bot${TOKEN}/sendMessage" \
-                                -d "chat_id=-1004366972797" \
-                                -d "text=✅ Сборка #${BUILD_NUMBER} [${JOB_NAME}] УСПЕШНА. Ссылка: <code>${buildUrl}</code>" \
-                                -d "parse_mode=HTML"
-                            """
+                        // Если тесты упали — отправляем одно сообщение о нестабильности
+                        if (testsFailed) {
+                            withCredentials([string(credentialsId: 'telegram-token', variable: 'TOKEN')]) {
+                                sh """
+                                    curl -s -X POST "https://api.telegram.org/bot${TOKEN}/sendMessage" \
+                                    -d "chat_id=-1004366972797" \
+                                    -d "text=⚠️ Сборка #${BUILD_NUMBER} [${JOB_NAME}] НЕСТАБИЛЬНА (тесты упали). Ссылка: <code>${buildUrl}</code>" \
+                                    -d "parse_mode=HTML"
+                                """
+                            }
+                        } else {
+                            // Всё успешно
+                            withCredentials([string(credentialsId: 'telegram-token', variable: 'TOKEN')]) {
+                                sh """
+                                    curl -s -X POST "https://api.telegram.org/bot${TOKEN}/sendMessage" \
+                                    -d "chat_id=-1004366972797" \
+                                    -d "text=✅ Сборка #${BUILD_NUMBER} [${JOB_NAME}] УСПЕШНА. Ссылка: <code>${buildUrl}</code>" \
+                                    -d "parse_mode=HTML"
+                                """
+                            }
                         }
 
                     } catch (Exception e) {
-                        // ---- ПАДЕНИЕ (ЛЮБОЕ) ----
+                        // Любая другая ошибка (падение сборки)
                         currentBuild.result = 'FAILURE'
                         echo "Сборка упала: ${e.message}"
 
@@ -79,20 +90,6 @@ pipeline {
                 reportFiles: 'index.html',
                 reportName: 'Allure Report'
             ])
-        }
-
-        unstable {
-            script {
-                def buildUrl = "http://localhost:8080/job/${JOB_NAME}/${BUILD_NUMBER}/"
-                withCredentials([string(credentialsId: 'telegram-token', variable: 'TOKEN')]) {
-                    sh """
-                        curl -s -X POST "https://api.telegram.org/bot${TOKEN}/sendMessage" \
-                        -d "chat_id=-1004366972797" \
-                        -d "text=⚠️ Сборка #${BUILD_NUMBER} [${JOB_NAME}] Тесты УПАЛИ. Ссылка: <code>${buildUrl}</code>" \
-                        -d "parse_mode=HTML"
-                    """
-                }
-            }
         }
     }
 }
