@@ -12,6 +12,8 @@ pipeline {
                 script {
                     def baseUrl = "http://localhost:8080/"
                     def buildUrl = baseUrl + currentBuild.rawBuild.getUrl()
+                                echo "buildUrl = ${buildUrl}"
+
 
                     withCredentials([string(credentialsId: 'telegram-token', variable: 'TOKEN')]) {
                         sh """
