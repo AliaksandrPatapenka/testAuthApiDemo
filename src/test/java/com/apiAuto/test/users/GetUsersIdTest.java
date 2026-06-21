@@ -40,7 +40,6 @@ public class GetUsersIdTest {
                     .statusCode(200)
                     .body("email", equalTo(userEmail))
                     .body(matchesJsonSchemaInClasspath("schemas/userCrudSchema/userSingleSchema.json"));
-            assertEquals(1, 2);
         }
     }
 
