@@ -2,20 +2,20 @@ pipeline {
     agent any
 
     parameters {
+        gitParameter(
+                    name: 'BRANCH_NAME',
+                    type: 'PT_BRANCH',
+                    branchFilter: 'origin/(.*)',
+                    defaultValue: 'master',
+                    description: 'Выберите ветку для сборки. По умолчанию "master"',
+                    selectedValue: 'DEFAULT',
+                    sortMode: 'DESCENDING_SMART'
+                    )
         choice(name: 'TEST_SUITE', choices: ['all', 'auth.*', 'users.*'], description: 'Пакет тестов. По умолчанию "all"')
         string(name: 'base.uri', defaultValue: 'https://api.escuelajs.co', description: 'Базовый URL API. По умолчанию "https://api.escuelajs.co"')
         string(name: 'base.path', defaultValue: '/api/v1', description: 'Базовый путь API. По умолчанию "/api/v1"')
         string(name: 'user.email', defaultValue: 'john@mail.com', description: 'Email для авторизации. По умолчанию "user.email"')
         password(name: 'user.password', defaultValue: 'changeme', description: 'Пароль для авторизации')
-        gitParameter(
-                name: 'BRANCH_NAME',
-                type: 'PT_BRANCH',
-                branchFilter: 'origin/(.*)',
-                defaultValue: 'master',
-                description: 'Выберите ветку для сборки',
-                selectedValue: 'DEFAULT',
-                sortMode: 'DESCENDING_SMART'
-            )
     }
 
     tools {
