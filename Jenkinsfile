@@ -10,7 +10,7 @@ pipeline {
     stage('Start') {
         steps {
             script {
-                def buildUrl = "http://localhost:8080/job/${JOB_NAME}/${BUILD_NUMBER}/"
+                def buildUrl = "http://localhost:8080/job/${JOB_NAME}/${BUILD_NUMBER}/".replace('#', '\\#')
                 withCredentials([string(credentialsId: 'telegram-token', variable: 'TOKEN')]) {
                     // Лог: что отправляем
                     echo "=== ОТПРАВКА В TELEGRAM ==="
