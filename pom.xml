@@ -90,9 +90,8 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.2.5</version>
                 <configuration>
-                    <parallel>class</parallel>
-                    <threadCount>3</threadCount>
-                    <useUnlimitedThreads>true</useUnlimitedThreads>
+                    <parallel>methods</parallel>
+                    <threadCount>4</threadCount>
                     <perCoreThreadCount>false</perCoreThreadCount>
                 </configuration>
             </plugin>
