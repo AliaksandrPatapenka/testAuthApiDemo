@@ -10,28 +10,25 @@ pipeline {
     stage('Start') {
         steps {
             script {
-                def buildUrl = "http://localhost:8080/job/${JOB_NAME}/${BUILD_NUMBER}/".replace('#', '\\#')
+                def rawUrl = "http://localhost:8080/job/${JOB_NAME}/${BUILD_NUMBER}/"
+                def buildUrl = rawUrl.replace('#', '\\#')
                 withCredentials([string(credentialsId: 'telegram-token', variable: 'TOKEN')]) {
-                    // Лог: что отправляем
                     echo "=== ОТПРАВКА В TELEGRAM ==="
                     echo "Текст: 🚀 Сборка #${BUILD_NUMBER} [${JOB_NAME}] запущена. [Ссылка на сборку](${buildUrl})"
                     echo "parse_mode: MarkdownV2"
-
-                    // Отправка и сохранение ответа
                     def response = sh(script: """
                         curl -s -X POST "https://api.telegram.org/bot${TOKEN}/sendMessage" \
                         -d "chat_id=-1004366972797" \
                         -d "text=🚀 Сборка #${BUILD_NUMBER} [${JOB_NAME}] запущена. [Ссылка на сборку](${buildUrl})" \
                         -d "parse_mode=MarkdownV2"
                     """, returnStdout: true).trim()
-
-                    // Лог: ответ от Telegram
                     echo "=== ОТВЕТ TELEGRAM API ==="
                     echo response
                 }
             }
         }
     }
+
         stage('Checkout') {
             steps {
                 checkout scm
