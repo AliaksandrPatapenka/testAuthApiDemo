@@ -2,9 +2,9 @@ pipeline {
     agent any
 
     parameters {
-        string(name: 'BASE_URI', defaultValue: 'https://api.escuelajs.co', description: 'Базовый URL API')
-        string(name: 'BASE_PATH', defaultValue: '/api/v1', description: 'Базовый путь API')
-        string(name: 'USER_EMAIL', defaultValue: 'john@mail.com', description: 'Email для авторизации')
+        string(name: 'BASE_URI', defaultValue: 'https://api.escuelajs.co', description: 'Базовый URL API. По дефолту https://api.escuelajs.co')
+        string(name: 'BASE_PATH', defaultValue: '/api/v1', description: 'Базовый путь API. По дефолту /api/v1')
+        string(name: 'USER_EMAIL', defaultValue: 'john@mail.com', description: 'Email для авторизации. По дефолту john@mail.com')
         password(name: 'USER_PASSWORD', defaultValue: 'changeme', description: 'Пароль для авторизации')
     }
 
