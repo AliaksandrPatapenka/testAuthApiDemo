@@ -2,15 +2,7 @@ pipeline {
     agent any
 
     parameters {
-        gitParameter(
-                    name: 'BRANCH_NAME',
-                    type: 'PT_BRANCH',
-                    branchFilter: 'origin/(.*)',
-                    defaultValue: 'master',
-                    description: 'Выберите ветку для сборки. По умолчанию "master"',
-                    selectedValue: 'DEFAULT',
-                    sortMode: 'DESCENDING_SMART'
-                    )
+        string(name: 'BRANCH_NAME', defaultValue: 'master', description: 'Введите название ветки для сборки')
         choice(name: 'TEST_SUITE', choices: ['all', 'auth.*', 'users.*'], description: 'Пакет тестов. По умолчанию "all"')
         string(name: 'base.uri', defaultValue: 'https://api.escuelajs.co', description: 'Базовый URL API. По умолчанию "https://api.escuelajs.co"')
         string(name: 'base.path', defaultValue: '/api/v1', description: 'Базовый путь API. По умолчанию "/api/v1"')
@@ -31,7 +23,6 @@ pipeline {
                     boolean testsFailed = false
 
                     try {
-                        // Уведомление о старте
                         withCredentials([string(credentialsId: 'telegram-token', variable: 'TOKEN')]) {
                             sh """
                                 curl -s -X POST "https://api.telegram.org/bot${TOKEN}/sendMessage" \
@@ -46,7 +37,6 @@ pipeline {
                                         url: 'https://github.com/AliaksandrPatapenka/testAuthApiDemo'
                                 }
 
-                        // Тесты с параметрами из Jenkins
                         try {
                             def testPattern = params.TEST_SUITE == 'all' ? '' : params.TEST_SUITE + '.*'
                             sh """
@@ -77,7 +67,6 @@ pipeline {
                         throw e
                     }
 
-                    // Отправка итогового сообщения
                     withCredentials([string(credentialsId: 'telegram-token', variable: 'TOKEN')]) {
                         def statusText = testsFailed ? "⚠️ НЕСТАБИЛЬНА (тесты упали)" : "✅ УСПЕШНА"
                         sh """
