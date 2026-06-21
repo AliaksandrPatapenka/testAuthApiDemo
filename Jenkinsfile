@@ -3,9 +3,9 @@ pipeline {
 
     parameters {
         choice(name: 'TEST_SUITE', choices: ['all', 'users', 'auth'], description: 'Пакет тестов. По умолчанию "all"')
-        string(name: 'base.uri', defaultValue: 'https://api.escuelajs.co', description: 'Базовый URL API. По дефолту "https://api.escuelajs.co"')
-        string(name: 'base.path', defaultValue: '/api/v1', description: 'Базовый путь API. По дефолту /api/v1')
-        string(name: 'ser.email', defaultValue: 'john@mail.com', description: 'Email для авторизации. По дефолту "john@mail.com"')
+        string(name: 'base.uri', defaultValue: 'https://api.escuelajs.co', description: 'Базовый URL API')
+        string(name: 'base.path', defaultValue: '/api/v1', description: 'Базовый путь API')
+        string(name: 'user.email', defaultValue: 'john@mail.com', description: 'Email для авторизации')
         password(name: 'user.password', defaultValue: 'changeme', description: 'Пароль для авторизации')
     }
 
@@ -36,14 +36,14 @@ pipeline {
 
                         // Тесты с параметрами из Jenkins
                         try {
+                            def testPattern = params.TEST_SUITE == 'all' ? '' : params.TEST_SUITE + '.*'
                             sh """
                                 mvn clean test \
-                                -Dbase.uri=${params.BASE_URI} \
-                                -Dbase.path=${params.BASE_PATH} \
-                                -Duser.email=${params.USER_EMAIL} \
-                                -Duser.password=${params.USER_PASSWORD}
-                                -Dtest=${params.TEST_SUITE == 'all' ? '' : params.TEST_SUITE + '.*'}
-
+                                -Dbase.uri=${params.'base.uri'} \
+                                -Dbase.path=${params.'base.path'} \
+                                -Duser.email=${params.'user.email'} \
+                                -Duser.password=${params.'user.password'} \
+                                -Dtest=${testPattern}
                             """
                         } catch (Exception e) {
                             testsFailed = true
