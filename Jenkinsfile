@@ -59,7 +59,7 @@ pipeline {
                         // 3.3. ЗАПУСК ТЕСТОВ с параметрами
                         // --------------------------------------------
                         try {
-                            def testPattern = params.TEST_SUITE == 'all' ? '' : params.TEST_SUITE + '.*'
+                            def testPattern = params.TEST_SUITE == 'all' ? '' : params.TEST_SUITE + '/*'
                             sh """
                                 mvn clean test \
                                 -Dbase.uri=${params.'base.uri'} \
