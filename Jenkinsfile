@@ -7,6 +7,15 @@ pipeline {
         string(name: 'base.path', defaultValue: '/api/v1', description: 'Базовый путь API')
         string(name: 'user.email', defaultValue: 'john@mail.com', description: 'Email для авторизации')
         password(name: 'user.password', defaultValue: 'changeme', description: 'Пароль для авторизации')
+        gitParameter(
+                name: 'BRANCH_NAME',
+                type: 'PT_BRANCH',
+                branchFilter: 'origin/(.*)',
+                defaultValue: 'master',
+                description: 'Выберите ветку для сборки',
+                selectedValue: 'DEFAULT',
+                sortMode: 'DESCENDING_SMART'
+            )
     }
 
     tools {
@@ -32,7 +41,10 @@ pipeline {
                             """
                         }
 
-                        checkout scm
+                        script {
+                                    git branch: "${params.BRANCH_NAME}",
+                                        url: 'https://github.com/AliaksandrPatapenka/testAuthApiDemo'
+                                }
 
                         // Тесты с параметрами из Jenkins
                         try {
