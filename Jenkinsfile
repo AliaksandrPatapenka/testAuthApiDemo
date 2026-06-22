@@ -40,22 +40,6 @@ pipeline {
                             // --------------------------------------------
                             // 3.1. Уведомление о СТАРТЕ сборки
                             // --------------------------------------------
-
-                            echo "=== ДИАГНОСТИКА ==="
-                            echo "EMAIL from credentials: ${EMAIL}"
-                            echo "PASSWORD from credentials: ${PASSWORD}"
-                            echo "params.USER_EMAIL: ${params.USER_EMAIL}"
-                            echo "params.USER_PASSWORD: ${params.USER_PASSWORD}"
-                            echo "EMAIL length: ${EMAIL ? EMAIL.length() : 'null'}"
-                            echo "PASSWORD length: ${PASSWORD ? PASSWORD.length() : 'null'}"
-                            echo "password value: '${password}'"
-                            echo "email value: '${email}'"
-                            echo "PASSWORD is null: ${PASSWORD == null}"
-                            echo "PASSWORD is empty: ${PASSWORD == ''}"
-                            echo "password variable: '${password}'"
-
-                            echo "=== КОНЕЦ ДИАГНОСТИКИ ==="
-
                             sh """
                                 curl -s -X POST "https://api.telegram.org/bot${TOKEN}/sendMessage" \
                                 -d "chat_id=-1004366972797" \
