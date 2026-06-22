@@ -60,6 +60,15 @@ try {
     def email = params.USER_EMAIL ?: EMAIL
 def password = params.USER_PASSWORD ? params.USER_PASSWORD.getPlainText() : PASSWORD
 
+echo "=== ДИАГНОСТИКА ==="
+echo "EMAIL: '${EMAIL}'"
+echo "PASSWORD: '${PASSWORD}'"
+echo "params.USER_EMAIL: '${params.USER_EMAIL}'"
+echo "params.USER_PASSWORD: '${params.USER_PASSWORD}'"
+echo "email: '${email}'"
+echo "password: '${password}'"
+echo "=== КОНЕЦ ==="
+
     if (!email || !password) {
         error "EMAIL or PASSWORD is empty! Check credentials in Jenkins."
     }
