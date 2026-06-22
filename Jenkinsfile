@@ -38,7 +38,7 @@ pipeline {
                         // --------------------------------------------
                         // 3.1. Уведомление о СТАРТЕ сборки
                         // --------------------------------------------
-                        withCredentials([string(
+                        withCredentials([
                                  string(credentialsId: 'telegram-token', variable: 'TOKEN'),
                                  string(credentialsId: 'user.email', variable: 'EMAIL'),
                                  string(credentialsId: 'user.password', variable: 'PASSWORD')
