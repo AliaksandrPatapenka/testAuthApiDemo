@@ -13,7 +13,6 @@ pipeline {
         password(name: 'USER_PASSWORD', defaultValue: '', description: 'Пароль пользователя для авторизации')
     }
 
-
     // ====================================================
     // 2. ИНСТРУМЕНТЫ (Maven и Java)
     // ====================================================
@@ -21,7 +20,6 @@ pipeline {
         maven 'maven3'
         jdk 'jdk21'
     }
-
 
     // ====================================================
     // 3. ОСНОВНАЯ ЛОГИКА СБОРКИ
@@ -33,16 +31,15 @@ pipeline {
                     def buildUrl = "http://localhost:8080/job/${JOB_NAME}/${BUILD_NUMBER}/"
                     boolean testsFailed = false
 
-
                     try {
                         // --------------------------------------------
                         // 3.1. Уведомление о СТАРТЕ сборки
                         // --------------------------------------------
                         withCredentials([
-                                 string(credentialsId: 'telegram-token', variable: 'TOKEN'),
-                                 string(credentialsId: 'user.email', variable: 'EMAIL'),
-                                 string(credentialsId: 'user.password', variable: 'PASSWORD')
-                                ]) {
+                            string(credentialsId: 'telegram-token', variable: 'TOKEN'),
+                            string(credentialsId: 'user.email', variable: 'EMAIL'),
+                            string(credentialsId: 'user.password', variable: 'PASSWORD')
+                        ]) {
                             sh """
                                 curl -s -X POST "https://api.telegram.org/bot${TOKEN}/sendMessage" \
                                 -d "chat_id=-1004366972797" \
@@ -51,13 +48,11 @@ pipeline {
                             """
                         }
 
-
                         // --------------------------------------------
                         // 3.2. Клонирование ВЫБРАННОЙ ВЕТКИ
                         // --------------------------------------------
                         git branch: "${params.BRANCH_NAME}",
                             url: 'https://github.com/AliaksandrPatapenka/testAuthApiDemo'
-
 
                         // --------------------------------------------
                         // 3.3. ЗАПУСК ТЕСТОВ с параметрами
@@ -66,17 +61,16 @@ pipeline {
                             def testPattern = params.TEST_SUITE == 'all' ? '' : params.TEST_SUITE + '/*'
                             sh """
                                 mvn clean test \
-                                -Dbase.uri=${params.'base.uri'} \
-                                -Dbase.path=${params.'base.path'} \
-                                -Duser.email=${email} \
-                                -Duser.password=${password} \
+                                -Dbase.uri=${params.BASE_URL} \
+                                -Dbase.path=${params.BASE_PATHS} \
+                                -Duser.email=${params.USER_EMAIL} \
+                                -Duser.password=${params.USER_PASSWORD} \
                                 -Dtest=${testPattern}
                             """
                         } catch (Exception e) {
                             testsFailed = true
                             currentBuild.result = 'UNSTABLE'
                         }
-
 
                         // --------------------------------------------
                         // 3.4. Генерация ALLURE-ОТЧЁТА
@@ -99,7 +93,6 @@ pipeline {
                         throw e
                     }
 
-
                     // --------------------------------------------
                     // 3.6. ИТОГОВОЕ сообщение (УСПЕШНА / НЕСТАБИЛЬНА)
                     // --------------------------------------------
@@ -116,7 +109,6 @@ pipeline {
             }
         }
     }
-
 
     // ====================================================
     // 4. ДЕЙСТВИЯ ПОСЛЕ СБОРКИ (всегда)
