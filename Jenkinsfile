@@ -102,11 +102,12 @@ pipeline {
                     // 3.6. ИТОГОВОЕ сообщение (УСПЕШНА / НЕСТАБИЛЬНА)
                     // --------------------------------------------
                     withCredentials([string(credentialsId: 'telegram.token', variable: 'TOKEN')]) {
-                        def statusText = testsFailed ? "⚠️ НЕСТАБИЛЬНА (тесты упали)" : "✅ УСПЕШНА"
+                        def statusIcon = testsFailed ? "⚠️" : "✅"
+                        def statusText = testsFailed ? "НЕСТАБИЛЬНА (тесты упали)" : "УСПЕШНА"
                         sh """
                             curl -s -X POST "https://api.telegram.org/bot${TOKEN}/sendMessage" \
                             -d "chat_id=-1004366972797" \
-                            -d "text=${statusText}. Сборка #${BUILD_NUMBER} [${JOB_NAME}]. Ссылка: <code>${buildUrl}</code>" \
+                            -d "text=${statusIcon}. Сборка #${BUILD_NUMBER} [${JOB_NAME}] ${statusText}. Ссылка: <code>${buildUrl}</code>" \
                             -d "parse_mode=HTML"
                         """
                     }
