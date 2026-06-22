@@ -33,7 +33,7 @@ pipeline {
 
                     try {
                         withCredentials([
-                            string(credentialsId: 'telegram-token', variable: 'TOKEN'),
+                            string(credentialsId: 'telegram.token', variable: 'TOKEN'),
                             string(credentialsId: 'user.email', variable: 'EMAIL'),
                             string(credentialsId: 'user.password', variable: 'PASSWORD')
                         ]) {
@@ -59,6 +59,11 @@ pipeline {
                             try {
                                 def email = params.USER_EMAIL ?: EMAIL
                                 def password = params.USER_PASSWORD ?: PASSWORD
+
+                                if (!email || !password) {
+                                    error "EMAIL or PASSWORD is empty! Check credentials in Jenkins."
+                                }
+
                                 def testPattern = params.TEST_SUITE == 'all' ? '' : params.TEST_SUITE + '/*'
                                 sh """
                                     mvn clean test \
