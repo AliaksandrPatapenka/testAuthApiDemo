@@ -35,7 +35,9 @@ pipeline {
                         withCredentials([
                             string(credentialsId: 'telegram.token', variable: 'TOKEN'),
                             string(credentialsId: 'user.email', variable: 'EMAIL'),
-                            string(credentialsId: 'user.password', variable: 'PASSWORD')
+                            usernamePassword(credentialsId: 'user-credentials',
+                                                 usernameVariable: 'USERNAME',
+                                                 passwordVariable: 'PASSWORD')
                         ]) {
                             // --------------------------------------------
                             // 3.1. Уведомление о СТАРТЕ сборки
@@ -57,16 +59,8 @@ pipeline {
                             // 3.3. ЗАПУСК ТЕСТОВ с параметрами
                             // --------------------------------------------
 try {
-    def email = params.USER_EMAIL ?: EMAIL
-def password = params.USER_PASSWORD ? "${params.USER_PASSWORD}" : (PASSWORD ? PASSWORD.getPlainText() : '')
-echo "=== ДИАГНОСТИКА ==="
-echo "EMAIL: '${EMAIL}'"
-echo "PASSWORD: '${PASSWORD}'"
-echo "params.USER_EMAIL: '${params.USER_EMAIL}'"
-echo "params.USER_PASSWORD: '${params.USER_PASSWORD}'"
-echo "email: '${email}'"
-echo "password: '${password}'"
-echo "=== КОНЕЦ ==="
+    def email = params.USER_EMAIL ?: USERNAME
+    def password = params.USER_PASSWORD ?: PASSWORD
 
     if (!email || !password) {
         error "EMAIL or PASSWORD is empty! Check credentials in Jenkins."
