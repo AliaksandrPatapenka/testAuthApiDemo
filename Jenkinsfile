@@ -41,8 +41,13 @@ pipeline {
                             // 3.1. Уведомление о СТАРТЕ сборки
                             // --------------------------------------------
 
-                            echo "EMAILtest: ${email}"
-                            echo "PASSWORDtest: ${password}"
+                            echo "=== ДИАГНОСТИКА ==="
+                            echo "EMAIL from credentials: ${EMAIL}"
+                            echo "PASSWORD from credentials: ${PASSWORD}"
+                            echo "params.USER_EMAIL: ${params.USER_EMAIL}"
+                            echo "params.USER_PASSWORD: ${params.USER_PASSWORD}"
+                            echo "=== КОНЕЦ ДИАГНОСТИКИ ==="
+
                             sh """
                                 curl -s -X POST "https://api.telegram.org/bot${TOKEN}/sendMessage" \
                                 -d "chat_id=-1004366972797" \
