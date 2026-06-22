@@ -39,10 +39,10 @@ pipeline {
                         // 3.1. Уведомление о СТАРТЕ сборки
                         // --------------------------------------------
                         withCredentials([string(
-                                credentialsId: 'telegram-token',
-                                variable: 'TOKEN',
-                                credentialsId: 'user.email', variable: 'EMAIL',
-                                credentialsId: 'user-password', variable: 'PASSWORD')]) {
+                                 string(credentialsId: 'telegram-token', variable: 'TOKEN'),
+                                 string(credentialsId: 'user.email', variable: 'EMAIL'),
+                                 string(credentialsId: 'user.password', variable: 'PASSWORD')
+                                ]) {
                             sh """
                                 curl -s -X POST "https://api.telegram.org/bot${TOKEN}/sendMessage" \
                                 -d "chat_id=-1004366972797" \
