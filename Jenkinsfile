@@ -40,6 +40,9 @@ pipeline {
                             // --------------------------------------------
                             // 3.1. Уведомление о СТАРТЕ сборки
                             // --------------------------------------------
+
+                            echo "EMAILtest: ${email}"
+                            echo "PASSWORDtest: ${password}"
                             sh """
                                 curl -s -X POST "https://api.telegram.org/bot${TOKEN}/sendMessage" \
                                 -d "chat_id=-1004366972797" \
@@ -89,7 +92,7 @@ pipeline {
                         // 3.5. Если сборка УПАЛА (ошибка в пайплайне)
                         // --------------------------------------------
                         currentBuild.result = 'FAILURE'
-                        withCredentials([string(credentialsId: 'telegram-token', variable: 'TOKEN')]) {
+                        withCredentials([string(credentialsId: 'telegram.token', variable: 'TOKEN')]) {
                             sh """
                                 curl -s -X POST "https://api.telegram.org/bot${TOKEN}/sendMessage" \
                                 -d "chat_id=-1004366972797" \
@@ -103,7 +106,7 @@ pipeline {
                     // --------------------------------------------
                     // 3.6. ИТОГОВОЕ сообщение (УСПЕШНА / НЕСТАБИЛЬНА)
                     // --------------------------------------------
-                    withCredentials([string(credentialsId: 'telegram-token', variable: 'TOKEN')]) {
+                    withCredentials([string(credentialsId: 'telegram.token', variable: 'TOKEN')]) {
                         def statusText = testsFailed ? "⚠️ НЕСТАБИЛЬНА (тесты упали)" : "✅ УСПЕШНА"
                         sh """
                             curl -s -X POST "https://api.telegram.org/bot${TOKEN}/sendMessage" \
