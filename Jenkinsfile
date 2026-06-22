@@ -58,6 +58,8 @@ pipeline {
                         // 3.3. ЗАПУСК ТЕСТОВ с параметрами
                         // --------------------------------------------
                         try {
+                            def email = params.USER_EMAIL ?: EMAIL
+                            def password = params.USER_PASSWORD ?: PASSWORD
                             def testPattern = params.TEST_SUITE == 'all' ? '' : params.TEST_SUITE + '/*'
                             sh """
                                 mvn clean test \
