@@ -9,8 +9,8 @@ pipeline {
         choice(name: 'TEST_SUITE', choices: ['all', 'auth', 'users'], description: 'Пакет тестов. По умолчанию "all"')
         string(name: 'BASE_URL', defaultValue: 'https://api.escuelajs.co', description: 'Базовый URL API')
         string(name: 'BASE_PATHS', defaultValue: '/api/v1', description: 'Базовый путь API')
-        string(name: 'USER_EMAIL', defaultValue: '', description: 'Email пользователя для авторизации')
-        password(name: 'USER_PASSWORD', defaultValue: '', description: 'Пароль пользователя для авторизации')
+        string(name: 'USER_EMAIL', defaultValue: '', description: 'Email пользователя для авторизации. По умолчанию подставится Email дефолтного пользователя ')
+        password(name: 'USER_PASSWORD', defaultValue: '', description: 'Пароль пользователя для авторизации. По умолчанию подставится пароль дефолтного пользователя ')
     }
 
     // ====================================================
