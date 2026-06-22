@@ -34,7 +34,6 @@ pipeline {
                     try {
                         withCredentials([
                             string(credentialsId: 'telegram.token', variable: 'TOKEN'),
-                            string(credentialsId: 'user.email', variable: 'EMAIL'),
                             usernamePassword(credentialsId: 'user-credentials',
                                                  usernameVariable: 'USERNAME',
                                                  passwordVariable: 'PASSWORD')
