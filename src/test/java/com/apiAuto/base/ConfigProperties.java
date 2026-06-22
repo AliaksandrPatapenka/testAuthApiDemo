@@ -7,15 +7,12 @@ public class ConfigProperties {
     private static final Properties props = new Properties();
 
     static {
-        // 1. Загружаем файл config.properties
         try (InputStream in = ConfigProperties.class.getClassLoader().getResourceAsStream("config.properties")) {
             props.load(in);
         } catch (Exception e) {
             throw new RuntimeException("config.properties not found", e);
-        }
-
-        // 2. Переопределяем значения, если они переданы из Jenkins
-        overrideFromSystemProperties();
+        }  // 1. Загружаем файл config.properties
+        overrideFromSystemProperties(); // 2. Переопределяем значения, если они переданы из Jenkins
     }
 
     /**
