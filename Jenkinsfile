@@ -50,6 +50,8 @@ pipeline {
                             echo "PASSWORD length: ${PASSWORD ? PASSWORD.length() : 'null'}"
                             echo "password value: '${password}'"
                             echo "email value: '${email}'"
+                            echo "PASSWORD is null: ${PASSWORD == null}"
+                            echo "PASSWORD is empty: ${PASSWORD == ''}"
                             echo "=== КОНЕЦ ДИАГНОСТИКИ ==="
 
                             sh """
