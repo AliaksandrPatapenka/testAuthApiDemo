@@ -32,52 +32,52 @@ pipeline {
                     boolean testsFailed = false
 
                     try {
-                        // --------------------------------------------
-                        // 3.1. Уведомление о СТАРТЕ сборки
-                        // --------------------------------------------
                         withCredentials([
                             string(credentialsId: 'telegram-token', variable: 'TOKEN'),
                             string(credentialsId: 'user.email', variable: 'EMAIL'),
                             string(credentialsId: 'user.password', variable: 'PASSWORD')
                         ]) {
+                            // --------------------------------------------
+                            // 3.1. Уведомление о СТАРТЕ сборки
+                            // --------------------------------------------
                             sh """
                                 curl -s -X POST "https://api.telegram.org/bot${TOKEN}/sendMessage" \
                                 -d "chat_id=-1004366972797" \
                                 -d "text=🚀 Сборка #${BUILD_NUMBER} [${JOB_NAME}] запущена. Ссылка: <code>${buildUrl}</code>" \
                                 -d "parse_mode=HTML"
                             """
+
+                            // --------------------------------------------
+                            // 3.2. Клонирование ВЫБРАННОЙ ВЕТКИ
+                            // --------------------------------------------
+                            git branch: "${params.BRANCH_NAME}",
+                                url: 'https://github.com/AliaksandrPatapenka/testAuthApiDemo'
+
+                            // --------------------------------------------
+                            // 3.3. ЗАПУСК ТЕСТОВ с параметрами
+                            // --------------------------------------------
+                            try {
+                                def email = params.USER_EMAIL ?: EMAIL
+                                def password = params.USER_PASSWORD ?: PASSWORD
+                                def testPattern = params.TEST_SUITE == 'all' ? '' : params.TEST_SUITE + '/*'
+                                sh """
+                                    mvn clean test \
+                                    -Dbase.uri=${params.BASE_URL} \
+                                    -Dbase.path=${params.BASE_PATHS} \
+                                    -Duser.email=${email} \
+                                    -Duser.password=${password} \
+                                    -Dtest=${testPattern}
+                                """
+                            } catch (Exception e) {
+                                testsFailed = true
+                                currentBuild.result = 'UNSTABLE'
+                            }
+
+                            // --------------------------------------------
+                            // 3.4. Генерация ALLURE-ОТЧЁТА
+                            // --------------------------------------------
+                            sh 'mvn allure:report'
                         }
-
-                        // --------------------------------------------
-                        // 3.2. Клонирование ВЫБРАННОЙ ВЕТКИ
-                        // --------------------------------------------
-                        git branch: "${params.BRANCH_NAME}",
-                            url: 'https://github.com/AliaksandrPatapenka/testAuthApiDemo'
-
-                        // --------------------------------------------
-                        // 3.3. ЗАПУСК ТЕСТОВ с параметрами
-                        // --------------------------------------------
-                        try {
-                            def email = params.USER_EMAIL ?: EMAIL
-                            def password = params.USER_PASSWORD ?: PASSWORD
-                            def testPattern = params.TEST_SUITE == 'all' ? '' : params.TEST_SUITE + '/*'
-                            sh """
-                                mvn clean test \
-                                -Dbase.uri=${params.BASE_URL} \
-                                -Dbase.path=${params.BASE_PATHS} \
-                                -Duser.email=${email} \
-                                -Duser.password=${password} \
-                                -Dtest=${testPattern}
-                            """
-                        } catch (Exception e) {
-                            testsFailed = true
-                            currentBuild.result = 'UNSTABLE'
-                        }
-
-                        // --------------------------------------------
-                        // 3.4. Генерация ALLURE-ОТЧЁТА
-                        // --------------------------------------------
-                        sh 'mvn allure:report'
 
                     } catch (Exception e) {
                         // --------------------------------------------
