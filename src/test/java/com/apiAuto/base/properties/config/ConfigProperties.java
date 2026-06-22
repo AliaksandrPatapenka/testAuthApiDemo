@@ -1,4 +1,4 @@
-package com.apiAuto.base;
+package com.apiAuto.base.properties;
 
 import java.io.InputStream;
 import java.util.Properties;
@@ -11,7 +11,7 @@ public class ConfigProperties {
             props.load(in);
         } catch (Exception e) {
             throw new RuntimeException("config.properties not found", e);
-        }  // 1. Загружаем файл config.properties
+        }  // 1. Загружаем файл local.properties
         overrideFromSystemProperties(); // 2. Переопределяем значения, если они переданы из Jenkins
     }
 
