@@ -1,6 +1,7 @@
 package com.apiAuto.test.users;
 
-import com.apiAuto.base.ConfigProperties;
+import com.apiAuto.base.properties.config.UserData;
+import com.apiAuto.base.properties.patch.UsersPatch;
 import com.apiAuto.helpers.testHelper.JsonContext;
 import com.apiAuto.helpers.testHelper.TestDataGenerator;
 import com.apiAuto.helpers.userHelper.UserCreateTemplate;
@@ -38,7 +39,7 @@ public class PutUsersIdTest {
             String userName = TestDataGenerator.generatorName(TestDataGenerator.timeIndex());
             String userEmail = TestDataGenerator.generatorEmail(TestDataGenerator.timeIndex());
             String userRole = "admin";
-            String userAvatar = ConfigProperties.get("image.uri");
+            String userAvatar = UserData.IMAGE_URI;
 
             UserUpdate jsonRequest = new UserUpdate();
             jsonRequest.setName(userName);
@@ -51,7 +52,7 @@ public class PutUsersIdTest {
             given(requestSpec())
                     .body(requestBody)
                     .when()
-                    .put(ConfigProperties.get("endpoint.users") + userId)
+                    .put(UsersPatch.ENDPOINT_USERS + userId)
                     .then()
                     .spec(responseSpec())
                     .statusCode(200)
@@ -77,14 +78,14 @@ public class PutUsersIdTest {
             int userId = createResponse.jsonPath().getInt("id");
 
             Map<String, Object> jsonRequest = UserJsonTemplate.userJsonTemplate();
-            jsonRequest.put("email", ConfigProperties.get("user.invalidFormatEmail"));
+            jsonRequest.put("email", UserData.INVALID_FORMAT_EMAIL);
             jsonRequest.remove("password");
             String requestBody = JsonContext.toJson(jsonRequest);
 
             given(requestSpec())
                     .body(requestBody)
                     .when()
-                    .put(ConfigProperties.get("endpoint.users") + userId)
+                    .put(UsersPatch.ENDPOINT_USERS + userId)
                     .then()
                     .spec(responseSpec())
                     .statusCode(400)

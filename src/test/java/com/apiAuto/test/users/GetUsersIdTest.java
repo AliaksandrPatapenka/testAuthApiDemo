@@ -1,6 +1,7 @@
 package com.apiAuto.test.users;
 
-import com.apiAuto.base.ConfigProperties;
+
+import com.apiAuto.base.properties.patch.UsersPatch;
 import com.apiAuto.helpers.userHelper.UserCreateTemplate;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.*;
@@ -34,7 +35,7 @@ public class GetUsersIdTest {
 
             given(requestSpec())
                     .when()
-                    .get(ConfigProperties.get("endpoint.users") + userId)
+                    .get(UsersPatch.ENDPOINT_USERS + userId)
                     .then()
                     .spec(responseSpec())
                     .statusCode(200)
@@ -56,7 +57,7 @@ public class GetUsersIdTest {
         void UserInvalid() {
             given(requestSpec())
                     .when()
-                    .get(ConfigProperties.get("endpoint.users") + 0)
+                    .get(UsersPatch.ENDPOINT_USERS + 0)
                     .then()
                     .spec(responseSpec())
                     .statusCode(400)

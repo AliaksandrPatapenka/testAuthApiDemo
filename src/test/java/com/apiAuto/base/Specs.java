@@ -1,5 +1,6 @@
 package com.apiAuto.base;
 
+import com.apiAuto.base.properties.config.TestProperties;
 import io.qameta.allure.restassured.AllureRestAssured;
 import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
@@ -18,8 +19,8 @@ import static io.restassured.RestAssured.baseURI;
  */
 public class Specs {
     static {
-        baseURI = "https://api.escuelajs.co";
-        RestAssured.basePath = "/api/v1";
+        baseURI = TestProperties.BASE_URI;
+        RestAssured.basePath = TestProperties.BASE_PATH;
     }
 
     public static final AllureRestAssured allureFilter = new AllureRestAssured();
@@ -33,8 +34,8 @@ public class Specs {
                 .addFilter(allureFilter)
                 .setConfig(RestAssured.config()
                 .httpClient(HttpClientConfig.httpClientConfig()
-                        .setParam("http.connection.timeout", Integer.parseInt(ConfigProperties.get("http.connection.timeout")))
-                        .setParam("http.socket.timeout", Integer.parseInt(ConfigProperties.get("http.socket.timeout")))))
+                        .setParam("http.connection.timeout", TestProperties.HTTP_CONNECTION_TIMEOUT)
+                        .setParam("http.socket.timeout", TestProperties.HTTP_SOCKET_TIMEOUT)))
                 .build();
     }
 

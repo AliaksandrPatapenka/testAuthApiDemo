@@ -1,6 +1,7 @@
 package com.apiAuto.test.users;
 
-import com.apiAuto.base.ConfigProperties;
+import com.apiAuto.base.properties.config.UserData;
+import com.apiAuto.base.properties.patch.UsersPatch;
 import com.apiAuto.helpers.testHelper.JsonContext;
 import com.apiAuto.models.users.CheckEmail;
 import org.junit.jupiter.api.*;
@@ -26,7 +27,7 @@ public class PostIsAvailableTest {
         @Test
         @DisplayName("Case1: Проверка  доступности email (Пользователь существует)")
         void checkEmailExist() {
-            String userEmail = ConfigProperties.get("user.email");
+            String userEmail = UserData.USER_EMAIL;
 
             CheckEmail checkEmail = new CheckEmail();
             checkEmail.setEmail(userEmail);
@@ -35,7 +36,7 @@ public class PostIsAvailableTest {
             given(requestSpec())
                     .body(requestBody)
                     .when()
-                    .post(ConfigProperties.get("endpoint.is_available"))
+                    .post(UsersPatch.ENDPOINT_IS_AVAILABLE)
                     .then()
                     .spec(responseSpec())
                     .statusCode(201)
@@ -48,13 +49,13 @@ public class PostIsAvailableTest {
         @DisplayName("Case2: Проверка  доступности email (Пользователь не существует)")
         void checkEmailNoExist() {
             CheckEmail checkEmail = new CheckEmail();
-            checkEmail.setEmail(ConfigProperties.get("user.nonExistentEmail"));
+            checkEmail.setEmail(UserData.NON_EXISTENT_EMAIL);
             String requestBody = JsonContext.toJson(checkEmail);
 
             given(requestSpec())
                     .body(requestBody)
                     .when()
-                    .post(ConfigProperties.get("endpoint.is_available"))
+                    .post(UsersPatch.ENDPOINT_IS_AVAILABLE)
                     .then()
                     .spec(responseSpec())
                     .statusCode(201)
@@ -82,7 +83,7 @@ public class PostIsAvailableTest {
             given(requestSpec())
                     .body(requestBody)
                     .when()
-                    .post(ConfigProperties.get("endpoint.is_available"))
+                    .post(UsersPatch.ENDPOINT_IS_AVAILABLE)
                     .then()
                     .spec(responseSpec())
                     .statusCode(400)

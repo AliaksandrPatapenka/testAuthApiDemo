@@ -1,6 +1,7 @@
 package com.apiAuto.test.users;
 
-import com.apiAuto.base.ConfigProperties;
+import com.apiAuto.base.properties.config.UserData;
+import com.apiAuto.base.properties.patch.UsersPatch;
 import com.apiAuto.helpers.testHelper.JsonContext;
 import com.apiAuto.helpers.testHelper.TestDataGenerator;
 import com.apiAuto.helpers.userHelper.UserJsonTemplate;
@@ -34,12 +35,12 @@ public class PostCreateTest {
             userCreate.setName(TestDataGenerator.generatorName(timeIndex));
             userCreate.setEmail(TestDataGenerator.generatorEmail(timeIndex));
             userCreate.setPassword(TestDataGenerator.randomPassword());
-            userCreate.setAvatar(ConfigProperties.get("image.uri"));
+            userCreate.setAvatar(UserData.IMAGE_URI);
 
             given(requestSpec())
                     .body(userCreate)
                     .when()
-                    .post(ConfigProperties.get("endpoint.users"))
+                    .post(UsersPatch.ENDPOINT_USERS)
                     .then()
                     .spec(responseSpec())
                     .statusCode(201)
@@ -74,7 +75,7 @@ public class PostCreateTest {
             given(requestSpec())
                     .body(requestBody)
                     .when()
-                    .post(ConfigProperties.get("endpoint.users"))
+                    .post(UsersPatch.ENDPOINT_USERS)
                     .then()
                     .spec(responseSpec())
                     .statusCode(400)

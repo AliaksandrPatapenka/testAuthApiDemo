@@ -1,6 +1,6 @@
 package com.apiAuto.helpers.userHelper;
 
-import com.apiAuto.base.ConfigProperties;
+import com.apiAuto.base.properties.config.UserData;
 import com.apiAuto.helpers.testHelper.TestDataGenerator;
 
 import java.util.HashMap;
@@ -14,7 +14,7 @@ public class UserJsonTemplate {
         userJsonTemplate.put("name", TestDataGenerator.generatorName(timeIndex));
         userJsonTemplate.put("email", TestDataGenerator.generatorEmail(timeIndex));
         userJsonTemplate.put("password", TestDataGenerator.randomPassword());
-        userJsonTemplate.put("avatar", ConfigProperties.get("image.uri"));
+        userJsonTemplate.put("avatar", UserData.IMAGE_URI);
 
         return userJsonTemplate;
     }

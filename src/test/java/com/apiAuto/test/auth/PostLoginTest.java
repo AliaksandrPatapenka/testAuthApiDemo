@@ -1,6 +1,7 @@
 package com.apiAuto.test.auth;
 
-import com.apiAuto.base.ConfigProperties;
+import com.apiAuto.base.properties.config.UserData;
+import com.apiAuto.base.properties.patch.AuthPatch;
 import com.apiAuto.helpers.authHelper.UserLoginHelper;
 import com.apiAuto.models.auth.UserLogin;
 import com.apiAuto.helpers.testHelper.JsonContext;
@@ -28,13 +29,13 @@ public class PostLoginTest {
         @DisplayName("Case1: Авторизация пользователя")
         void userLogin() {
             UserLogin user = new UserLogin();
-            user.setEmail(ConfigProperties.get("user.email"));
-            user.setPassword(ConfigProperties.get("user.password"));
+            user.setEmail(UserData.USER_EMAIL);
+            user.setPassword(UserData.USER_PASSWORD);
             String requestBody = JsonContext.toJson(user);
 
             given(requestSpec())
                     .body(requestBody).when()
-                    .post(ConfigProperties.get("endpoint.login"))
+                    .post(AuthPatch.ENDPOINT_LOGIN)
                     .then().spec(responseSpec()).statusCode(201)
                     .body(matchesJsonSchemaInClasspath("schemas/userAuthSchema/userAuthSchema.json"));
         }
@@ -53,8 +54,8 @@ public class PostLoginTest {
         @Order(1)
         @DisplayName("Case1: Неверный логин пользователя")
         void incorrectEmail() {
-            String userEmailLogin = ConfigProperties.get("user.nonExistentEmail");
-            String userPasswordLogin = ConfigProperties.get("user.password");
+            String userEmailLogin = UserData.NON_EXISTENT_EMAIL;
+            String userPasswordLogin = UserData.USER_PASSWORD;
 
             UserLoginHelper.userLogin(userEmailLogin, userPasswordLogin)
                     .then().spec(responseSpec())
@@ -66,8 +67,8 @@ public class PostLoginTest {
         @Order(2)
         @DisplayName("Case2: Неверный пароль пользователя")
         void incorrectPassword() {
-            String userEmailLogin = ConfigProperties.get("user.email");
-            String userPasswordLogin = ConfigProperties.get("user.invalidPassword");
+            String userEmailLogin = UserData.USER_EMAIL;
+            String userPasswordLogin = UserData.INVALID_PASSWORD;
 
             UserLoginHelper.userLogin(userEmailLogin, userPasswordLogin)
                     .then().spec(responseSpec())

@@ -1,6 +1,6 @@
 package com.apiAuto.helpers.testHelper;
 
-import com.apiAuto.base.ConfigProperties;
+import com.apiAuto.base.properties.config.UserData;
 
 import java.security.SecureRandom;
 import java.time.LocalDateTime;
@@ -35,7 +35,7 @@ public class TestDataGenerator {
      * Передаем текущее время из timeIndex и подставляем в user.email из config.properties
      */
     public static String generatorEmail(String timeIndex) {
-        String template = ConfigProperties.get("email.template");
+        String template = UserData.EMAIL_TEMPLATE;
         return String.format(template, timeIndex);
     }
 
@@ -45,7 +45,7 @@ public class TestDataGenerator {
      * Передаем текущее время из timeIndex и подставляем в user.email из config.properties
      */
     public static String generatorName(String timeIndex) {
-        String template = ConfigProperties.get("user.name");
+        String template = UserData.USER_NAME;
         return String.format(template, timeIndex);
     }
 

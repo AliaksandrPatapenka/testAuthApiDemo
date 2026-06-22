@@ -1,12 +1,28 @@
-package com.apiAuto.base.properties;
+package com.apiAuto.base.properties.config;
+
+import java.io.InputStream;
+import java.util.Properties;
 
 public final class UserData {
+    private static final Properties props = new Properties();
+
+    static {
+        try (InputStream in = UserData.class.getResourceAsStream("/local.properties")) {
+            if (in != null) {
+                props.load(in);
+            }
+        } catch (Exception e) {
+            // ignore
+        }
+    } // Загружает local.properties для локального запуска. В Jenkins переопределяется через -D.
+
+
     /**
      * Валидные тестовые пользователи<br>
      * Email и password прописаны в Jenkins /manage/credentials/store/system/domain
      */
-    public static final String USER_EMAIL = System.getProperty("user.email");
-    public static final String USER_PASSWORD = System.getProperty("user.password");
+    public static final String USER_EMAIL = System.getProperty("user.email", props.getProperty("user.email"));
+    public static final String USER_PASSWORD = System.getProperty("user.password", props.getProperty("user.password"));
 
 
     /**

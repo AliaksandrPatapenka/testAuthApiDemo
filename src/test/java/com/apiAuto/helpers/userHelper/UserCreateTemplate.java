@@ -1,6 +1,6 @@
 package com.apiAuto.helpers.userHelper;
 
-import com.apiAuto.base.ConfigProperties;
+import com.apiAuto.base.properties.patch.UsersPatch;
 import com.apiAuto.helpers.testHelper.JsonContext;
 import io.restassured.response.Response;
 
@@ -19,7 +19,7 @@ public class UserCreateTemplate {
         return given(requestSpec())
                 .body(requestBody)
                 .when()
-                .post(ConfigProperties.get("endpoint.users"))
+                .post(UsersPatch.ENDPOINT_USERS)
                 .then()
                 .spec(responseSpec())
                 .extract().response();

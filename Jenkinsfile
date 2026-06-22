@@ -2,15 +2,15 @@ pipeline {
     agent any
 
     // ====================================================
-    // 1. ПАРАМЕТРЫ СБОРКИ (что видно при запуске)
+    // 1. ПАРАМЕТРЫ СБОРКИ
     // ====================================================
     parameters {
         string(name: 'BRANCH_NAME', defaultValue: 'master', description: 'Название ветки. По умолчанию "master"')
         choice(name: 'TEST_SUITE', choices: ['all', 'auth', 'users'], description: 'Пакет тестов. По умолчанию "all"')
-        string(name: 'base.uri', defaultValue: 'https://api.escuelajs.co', description: 'Базовый URL API')
-        string(name: 'base.path', defaultValue: '/api/v1', description: 'Базовый путь API')
-        string(name: 'user.email', defaultValue: 'john@mail.com', description: 'Email пользователя для авторизации')
-        password(name: 'user.password', defaultValue: 'changeme', description: 'Пароль пользователя для авторизации')
+        string(name: 'BASE_URL', defaultValue: 'https://api.escuelajs.co', description: 'Базовый URL API')
+        string(name: 'BASE_PATHS', defaultValue: '/api/v1', description: 'Базовый путь API')
+        string(name: 'USER_EMAIL', defaultValue: '', description: 'Email пользователя для авторизации')
+        password(name: 'USER_PASSWORD', defaultValue: '', description: 'Пароль пользователя для авторизации')
     }
 
 
@@ -38,7 +38,11 @@ pipeline {
                         // --------------------------------------------
                         // 3.1. Уведомление о СТАРТЕ сборки
                         // --------------------------------------------
-                        withCredentials([string(credentialsId: 'telegram-token', variable: 'TOKEN')]) {
+                        withCredentials([string(
+                                credentialsId: 'telegram-token',
+                                variable: 'TOKEN',
+                                credentialsId: 'user.email', variable: 'EMAIL',
+                                credentialsId: 'user-password', variable: 'PASSWORD')]) {
                             sh """
                                 curl -s -X POST "https://api.telegram.org/bot${TOKEN}/sendMessage" \
                                 -d "chat_id=-1004366972797" \
@@ -64,8 +68,8 @@ pipeline {
                                 mvn clean test \
                                 -Dbase.uri=${params.'base.uri'} \
                                 -Dbase.path=${params.'base.path'} \
-                                -Duser.email=${params.'user.email'} \
-                                -Duser.password=${params.'user.password'} \
+                                -Duser.email=${email} \
+                                -Duser.password=${password} \
                                 -Dtest=${testPattern}
                             """
                         } catch (Exception e) {

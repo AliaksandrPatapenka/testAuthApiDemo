@@ -1,6 +1,7 @@
 package com.apiAuto.test.users;
 
-import com.apiAuto.base.ConfigProperties;
+
+import com.apiAuto.base.properties.patch.UsersPatch;
 import com.apiAuto.helpers.userHelper.UserCreateTemplate;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.*;
@@ -32,7 +33,7 @@ public class GetUsersTest {
 
             given(requestSpec())
                     .when()
-                    .get(ConfigProperties.get("endpoint.users"))
+                    .get(UsersPatch.ENDPOINT_USERS)
                     .then()
                     .spec(responseSpec())
                     .statusCode(200)

@@ -1,6 +1,8 @@
 package com.apiAuto.test.auth;
 
-import com.apiAuto.base.ConfigProperties;
+
+import com.apiAuto.base.properties.config.UserData;
+import com.apiAuto.base.properties.patch.AuthPatch;
 import com.apiAuto.helpers.authHelper.UserLoginHelper;
 import com.apiAuto.helpers.testHelper.JsonContext;
 import com.apiAuto.models.auth.UserRefreshToken;
@@ -28,8 +30,8 @@ public class PostRefreshTokenTest {
         @Test
         @DisplayName("Case1: Обновление токена")
         void userRefreshToken() {
-            String userEmailLogin = ConfigProperties.get("user.email");
-            String userPasswordLogin = ConfigProperties.get("user.password");
+            String userEmailLogin = UserData.USER_EMAIL;
+            String userPasswordLogin = UserData.USER_PASSWORD;
 
             Response loginResponse = UserLoginHelper.userLogin(userEmailLogin, userPasswordLogin);
             String userRefToken = loginResponse.jsonPath().getString("refresh_token");
@@ -42,7 +44,7 @@ public class PostRefreshTokenTest {
             given(requestSpec())
                     .body(requestBody)
                     .when()
-                    .post(ConfigProperties.get("endpoint.refreshToken"))
+                    .post(AuthPatch.ENDPOINT_REFRESH_TOKEN)
                     .then().spec(responseSpec())
                     .statusCode(201)
                     .body("access_token", not(emptyString()))
@@ -64,7 +66,7 @@ public class PostRefreshTokenTest {
         void incorrectRefreshToken() {
             given(requestSpec()).body("{}")
                     .when()
-                    .post(ConfigProperties.get("endpoint.refreshToken"))
+                    .post(AuthPatch.ENDPOINT_REFRESH_TOKEN)
                     .then().spec(responseSpec()).statusCode(400)
                     .body(matchesJsonSchemaInClasspath("schemas/errorSchema/400errorSchema.json"));
         }

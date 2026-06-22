@@ -1,6 +1,6 @@
 package com.apiAuto.helpers.authHelper;
 
-import com.apiAuto.base.ConfigProperties;
+import com.apiAuto.base.properties.patch.AuthPatch;
 import com.apiAuto.helpers.testHelper.JsonContext;
 import com.apiAuto.models.auth.UserLogin;
 import io.restassured.response.Response;
@@ -17,7 +17,7 @@ public class UserLoginHelper {
             return given(requestSpec())
                     .body(requestBody)
                     .when()
-                    .post(ConfigProperties.get("endpoint.login"))
+                    .post(AuthPatch.ENDPOINT_LOGIN)
                     .then()
                     .extract().response();
         }

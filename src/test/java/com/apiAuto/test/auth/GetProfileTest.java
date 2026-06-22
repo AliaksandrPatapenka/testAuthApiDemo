@@ -1,6 +1,7 @@
 package com.apiAuto.test.auth;
 
-import com.apiAuto.base.ConfigProperties;
+import com.apiAuto.base.properties.config.UserData;
+import com.apiAuto.base.properties.patch.AuthPatch;
 import com.apiAuto.helpers.authHelper.UserLoginHelper;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.*;
@@ -26,8 +27,8 @@ public class GetProfileTest {
         @Test
         @DisplayName("Case1: Переход в профиль пользователя")
         void userProfile() {
-            String userEmailLogin = ConfigProperties.get("user.email");
-            String userPasswordLogin = ConfigProperties.get("user.password");
+            String userEmailLogin = UserData.USER_EMAIL;
+            String userPasswordLogin = UserData.USER_PASSWORD;
 
             Response loginResponse = UserLoginHelper.userLogin(userEmailLogin, userPasswordLogin);
             String tokenAuth = loginResponse.jsonPath().getString("access_token");
@@ -35,7 +36,7 @@ public class GetProfileTest {
             given(requestSpec())
                     .header("Authorization", "Bearer " + tokenAuth)
                     .when()
-                    .get(ConfigProperties.get("endpoint.profile"))
+                    .get(AuthPatch.ENDPOINT_PROFILE)
                     .then()
                     .spec(responseSpec())
                     .statusCode(200)
@@ -59,7 +60,7 @@ public class GetProfileTest {
         void incorrectProfile() {
             given(requestSpec())
                     .when()
-                    .get(ConfigProperties.get("endpoint.profile"))
+                    .get(AuthPatch.ENDPOINT_PROFILE)
                     .then()
                     .spec(responseSpec())
                     .statusCode(401)
