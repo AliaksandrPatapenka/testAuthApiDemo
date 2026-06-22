@@ -27,7 +27,7 @@ public class GetUsersIdTest {
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     class PositiveTests {
         @Test
-        @DisplayName("Case1: Получение данных по пользователю")
+        @DisplayName("Case3.1: Получение данных по пользователю")
         void userSingle() {
             Response createResponse = UserCreateTemplate.userCreateTemplate();
             int userId = createResponse.jsonPath().getInt("id");
@@ -53,7 +53,7 @@ public class GetUsersIdTest {
     @Order(2)
     class NegativeTests {
         @Test
-        @DisplayName("Case1: Получение данных по несуществующему пользователю")
+        @DisplayName("Case3.1: Получение данных по несуществующему пользователю")
         void UserInvalid() {
             given(requestSpec())
                     .when()

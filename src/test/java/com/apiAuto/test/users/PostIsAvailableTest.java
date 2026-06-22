@@ -25,7 +25,7 @@ public class PostIsAvailableTest {
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     class PositiveTests {
         @Test
-        @DisplayName("Case1: Проверка  доступности email (Пользователь существует)")
+        @DisplayName("Case5.1: Проверка  доступности email (Пользователь существует)")
         void checkEmailExist() {
             String userEmail = UserData.USER_EMAIL;
 
@@ -46,7 +46,7 @@ public class PostIsAvailableTest {
         }
 
         @Test
-        @DisplayName("Case2: Проверка  доступности email (Пользователь не существует)")
+        @DisplayName("Case5.2: Проверка  доступности email (Пользователь не существует)")
         void checkEmailNoExist() {
             CheckEmail checkEmail = new CheckEmail();
             checkEmail.setEmail(UserData.NON_EXISTENT_EMAIL);
@@ -74,7 +74,7 @@ public class PostIsAvailableTest {
     @Order(2)
     class NegativeTests {
         @Test
-        @DisplayName("Case1: Проверка  доступности email при email = null")
+        @DisplayName("Case5.1: Проверка  доступности email при email = null")
         void checkEmailNull() {
             CheckEmail checkEmail = new CheckEmail();
             checkEmail.setEmail(null);

@@ -15,7 +15,7 @@ import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInC
 import static org.hamcrest.Matchers.equalTo;
 
 @TestClassOrder(ClassOrderer.OrderAnnotation.class)
-public class PostCreateTest {
+public class PostUsersTest {
 
     /**
      * ==================== ПОЗИТИВНЫЕ ТЕСТЫ ====================
@@ -28,7 +28,7 @@ public class PostCreateTest {
     class PositiveTests {
 
         @Test
-        @DisplayName("Case1: Создание пользователя")
+        @DisplayName("Case1.1: Создание пользователя")
         void userCreate() {
             String timeIndex = TestDataGenerator.timeIndex();
             UserCreate userCreate = new UserCreate();
@@ -65,7 +65,7 @@ public class PostCreateTest {
 
         @Test
         @Order(1)
-        @DisplayName("Case1: Создание пользователя при отсутствии в запросе ключа email")
+        @DisplayName("Case1.1: Создание пользователя при отсутствии в запросе ключа email")
         void userCreateInvalid() {
             Map<String, Object> jsonRequest = UserJsonTemplate.userJsonTemplate();
             jsonRequest.remove("email");

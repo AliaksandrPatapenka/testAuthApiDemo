@@ -31,7 +31,7 @@ public class PutUsersIdTest {
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     class PositiveTests {
         @Test
-        @DisplayName("Case1: Редактирование пользователя")
+        @DisplayName("Case4.1: Редактирование пользователя")
         void userUpdate() {
             Response createResponse = UserCreateTemplate.userCreateTemplate();
             int userId = createResponse.jsonPath().getInt("id");
@@ -72,7 +72,7 @@ public class PutUsersIdTest {
     @Order(2)
     class NegativeTests {
         @Test
-        @DisplayName("Case1: Редактирование  пользователя при введенном некорректном Email")
+        @DisplayName("Case4.1: Редактирование  пользователя при введенном некорректном Email")
         void userUpdateInvalid() {
             Response createResponse = UserCreateTemplate.userCreateTemplate();
             int userId = createResponse.jsonPath().getInt("id");
