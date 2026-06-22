@@ -64,7 +64,7 @@ pipeline {
                                     error "EMAIL or PASSWORD is empty! Check credentials in Jenkins."
                                 }
 
-                                def testPattern = params.TEST_SUITE == 'all' ? '' : params.TEST_SUITE + '.*'
+                                def testPattern = params.TEST_SUITE == 'all' ? '' : params.TEST_SUITE + '/*'
 
                                 sh """
                                     mvn clean test \
