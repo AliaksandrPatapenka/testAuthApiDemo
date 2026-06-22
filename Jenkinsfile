@@ -46,6 +46,8 @@ pipeline {
                             echo "PASSWORD from credentials: ${PASSWORD}"
                             echo "params.USER_EMAIL: ${params.USER_EMAIL}"
                             echo "params.USER_PASSWORD: ${params.USER_PASSWORD}"
+                            echo "EMAIL length: ${EMAIL ? EMAIL.length() : 'null'}"
+                            echo "PASSWORD length: ${PASSWORD ? PASSWORD.length() : 'null'}"
                             echo "=== КОНЕЦ ДИАГНОСТИКИ ==="
 
                             sh """
