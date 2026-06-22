@@ -40,3 +40,6 @@ build/
 
 ### Мои файлы ###
 local.properties
+allure-report/
+allure-results/
+target/
