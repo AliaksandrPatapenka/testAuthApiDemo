@@ -58,7 +58,7 @@ pipeline {
                             // --------------------------------------------
 try {
     def email = params.USER_EMAIL ?: EMAIL
-def password = params.USER_PASSWORD ? params.USER_PASSWORD.getPlainText() : PASSWORD
+def password = params.USER_PASSWORD ? "${params.USER_PASSWORD}" : PASSWORD.getPlainText()
 
 echo "=== ДИАГНОСТИКА ==="
 echo "EMAIL: '${EMAIL}'"
