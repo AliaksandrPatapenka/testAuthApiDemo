@@ -65,8 +65,8 @@ pipeline {
                                 mvn clean test \
                                 -Dbase.uri=${params.BASE_URL} \
                                 -Dbase.path=${params.BASE_PATHS} \
-                                -Duser.email=${params.USER_EMAIL} \
-                                -Duser.password=${params.USER_PASSWORD} \
+                                -Duser.email=${email} \
+                                -Duser.password=${password} \
                                 -Dtest=${testPattern}
                             """
                         } catch (Exception e) {
