@@ -56,28 +56,31 @@ pipeline {
                             // --------------------------------------------
                             // 3.3. ЗАПУСК ТЕСТОВ с параметрами
                             // --------------------------------------------
-                            try {
-                                def email = (params.USER_EMAIL && params.USER_EMAIL.trim()) ? params.USER_EMAIL : EMAIL
-                                def password = (params.USER_PASSWORD && params.USER_PASSWORD.trim()) ? params.USER_PASSWORD : PASSWORD
+try {
+    def email = (params.USER_EMAIL && params.USER_EMAIL.trim()) ? params.USER_EMAIL : EMAIL
+    def password = (params.USER_PASSWORD && params.USER_PASSWORD.trim()) ? params.USER_PASSWORD : PASSWORD
 
-                                if (!email || !password) {
-                                    error "EMAIL or PASSWORD is empty! Check credentials in Jenkins."
-                                }
+    if (!email || !password) {
+        error "EMAIL or PASSWORD is empty! Check credentials in Jenkins."
+    }
 
-                                def testPattern = params.TEST_SUITE == 'all' ? '' : params.TEST_SUITE + '/*'
+    def testPattern = params.TEST_SUITE == 'all' ? '' : params.TEST_SUITE + '/*'
 
-                                sh """
-                                    mvn clean test \
-                                    -Dbase.uri=${params.BASE_URL} \
-                                    -Dbase.path=${params.BASE_PATHS} \
-                                    -Duser.email=${email} \
-                                    -Duser.password=${password} \
-                                    -Dtest=${testPattern}
-                                """
-                            } catch (Exception e) {
-                                testsFailed = true
-                                currentBuild.result = 'UNSTABLE'
-                            }
+    echo "testPattern: ${testPattern}"
+
+    sh """
+        mvn clean test -e \
+        -Dbase.uri=${params.BASE_URL} \
+        -Dbase.path=${params.BASE_PATHS} \
+        -Duser.email=${email} \
+        -Duser.password=${password} \
+        -Dtest=${testPattern}
+    """
+} catch (Exception e) {
+    testsFailed = true
+    currentBuild.result = 'UNSTABLE'
+    echo "Error in test execution: ${e.message}"
+}
 
                             // --------------------------------------------
                             // 3.4. Генерация ALLURE-ОТЧЁТА
