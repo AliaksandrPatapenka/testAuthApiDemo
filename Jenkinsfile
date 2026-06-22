@@ -57,8 +57,8 @@ pipeline {
                             // 3.3. ЗАПУСК ТЕСТОВ с параметрами
                             // --------------------------------------------
 try {
-    def email = (params.USER_EMAIL && params.USER_EMAIL.trim()) ? params.USER_EMAIL : EMAIL
-    def password = (params.USER_PASSWORD && params.USER_PASSWORD.trim()) ? params.USER_PASSWORD : PASSWORD
+    def email = params.USER_EMAIL ?: EMAIL
+    def password = params.USER_PASSWORD ?: PASSWORD
 
     if (!email || !password) {
         error "EMAIL or PASSWORD is empty! Check credentials in Jenkins."
