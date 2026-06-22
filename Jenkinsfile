@@ -35,8 +35,8 @@ pipeline {
                         withCredentials([
                             string(credentialsId: 'telegram.token', variable: 'TOKEN'),
                             usernamePassword(credentialsId: 'user-credentials',
-                                                 usernameVariable: 'USERNAME',
-                                                 passwordVariable: 'PASSWORD')
+                                             usernameVariable: 'USERNAME',
+                                             passwordVariable: 'PASSWORD')
                         ]) {
                             // --------------------------------------------
                             // 3.1. Уведомление о СТАРТЕ сборки
@@ -57,31 +57,24 @@ pipeline {
                             // --------------------------------------------
                             // 3.3. ЗАПУСК ТЕСТОВ с параметрами
                             // --------------------------------------------
-try {
-    def email = params.USER_EMAIL ?: USERNAME
-    def password = params.USER_PASSWORD ?: PASSWORD
+                            try {
+                                def testPattern = params.TEST_SUITE == 'all' ? '' : params.TEST_SUITE + '/*'
 
-    if (!email || !password) {
-        error "EMAIL or PASSWORD is empty! Check credentials in Jenkins."
-    }
-
-    def testPattern = params.TEST_SUITE == 'all' ? '' : params.TEST_SUITE + '/*'
-
-    echo "testPattern: ${testPattern}"
-
-    sh """
-        mvn clean test -e \
-        -Dbase.uri=${params.BASE_URL} \
-        -Dbase.path=${params.BASE_PATHS} \
-        -Duser.email=${email} \
-        -Duser.password=${password} \
-        -Dtest=${testPattern}
-    """
-} catch (Exception e) {
-    testsFailed = true
-    currentBuild.result = 'UNSTABLE'
-    echo "Error in test execution: ${e.message}"
-}
+                                // Используем одинарные кавычки, чтобы Groovy не интерполировал переменные.
+                                // Параметры BASE_URL и BASE_PATHS подставляем через конкатенацию,
+                                // так как они не являются секретами.
+                                sh '''
+                                    mvn clean test -e \
+                                    -Dbase.uri=''' + params.BASE_URL + ''' \
+                                    -Dbase.path=''' + params.BASE_PATHS + ''' \
+                                    -Duser.email=$USERNAME \
+                                    -Duser.password=$PASSWORD \
+                                    -Dtest=''' + testPattern
+                            } catch (Exception e) {
+                                testsFailed = true
+                                currentBuild.result = 'UNSTABLE'
+                                echo "Error in test execution: ${e.message}"
+                            }
 
                             // --------------------------------------------
                             // 3.4. Генерация ALLURE-ОТЧЁТА
