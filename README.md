@@ -110,17 +110,13 @@ Jenkins-пайплайн отправляет уведомления в Telegram
 
 После выполнения тестов генерируется детальный Allure-отчет.
 
-**Пример отчета:**
+**Пример отчета (Тест пройден успешно):**
 
-![Allure Overview](screenshots/allure-overview.png)
+![Allure Overview](screenshots/allure1.png)
 
-**Детали запроса:**
+**Пример отчета (Тест упал):**
 
-![Allure Request](screenshots/allure-request.png)
-
-**Детали ответа:**
-
-![Allure Response](screenshots/allure-response.png)
+![Allure Request](screenshots/allure2.png)
 
 ---
 

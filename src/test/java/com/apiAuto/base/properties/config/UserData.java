@@ -38,5 +38,5 @@ public final class UserData {
      */
     public static final String IMAGE_URI = System.getProperty("image.uri", "https://test.com");
     public static final String EMAIL_TEMPLATE = System.getProperty("email.template", "Test_%s@example.com");
-    public static final String USER_NAME= System.getProperty("user.name", "Test_%s");
+    public static final String USER_NAME= System.getProperty("user.name.template", "Test_%s");
 }
