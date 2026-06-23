@@ -56,7 +56,7 @@ public class PutUsersIdTest {
                     .then()
                     .spec(responseSpec())
                     .statusCode(200)
-                    .body("name", equalTo(userName))
+                    .body("name1", equalTo(userName))
                     .body("email", equalTo(userEmail))
                     .body("role", equalTo(userRole))
                     .body("avatar", equalTo(userAvatar))
