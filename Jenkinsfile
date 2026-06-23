@@ -5,11 +5,11 @@ pipeline {
     // 1. ПАРАМЕТРЫ СБОРКИ
     // ====================================================
     parameters {
-        string(name: 'REPO_URL', defaultValue: 'https://github.com/AliaksandrPatapenka/testAuthApiDemo', description: 'URL репозитория с кодом')
+        string(name: 'REPO_URL', defaultValue: 'https://github.com/AliaksandrPatapenka/testAuthApiDemo', description: 'URL репозитория с кодом. По умолчанию https://github.com/AliaksandrPatapenka/testAuthApiDemo')
         string(name: 'BRANCH_NAME', defaultValue: 'master', description: 'Название ветки. По умолчанию "master"')
         choice(name: 'TEST_SUITE', choices: ['all', 'auth', 'users'], description: 'Пакет тестов. По умолчанию "all"')
-        string(name: 'BASE_URL', defaultValue: 'https://api.escuelajs.co', description: 'Базовый URL API')
-        string(name: 'BASE_PATHS', defaultValue: '/api/v1', description: 'Базовый путь API')
+        string(name: 'BASE_URL', defaultValue: 'https://api.escuelajs.co', description: 'Базовый URL API. По умолчанию https://api.escuelajs.co')
+        string(name: 'BASE_PATHS', defaultValue: '/api/v1', description: 'Базовый путь API. По умолчанию /api/v1')
         string(name: 'USER_EMAIL', defaultValue: '', description: 'Email пользователя для авторизации. По умолчанию подставится Email дефолтного пользователя ')
         password(name: 'USER_PASSWORD', defaultValue: '', description: 'Пароль пользователя для авторизации. По умолчанию подставится пароль дефолтного пользователя ')
     }
