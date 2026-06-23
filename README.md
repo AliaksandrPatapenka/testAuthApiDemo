@@ -2,6 +2,8 @@
 
 Автоматизированные тесты для REST API с использованием **RestAssured**, **JUnit 5**, **Allure Reports** и интеграцией с **Jenkins**. Проект покрывает CRUD-операции пользователей, авторизацию, проверку email и профиль. Реализована поддержка параллельного выполнения тестов, генерации тестовых данных, валидации JSON Schema и отправки уведомлений в Telegram о результатах сборки.
 
+В качестве демонстрации возможностей фреймворк покрывает тестами публичное API [Platzi Fake Store API](https://fakeapi.platzi.com/en/about/introduction/).
+
 ---
 
 ## Используемые технологии
@@ -100,7 +102,7 @@ Jenkins-пайплайн отправляет уведомления в Telegram
 - ⚠️ **Нестабильная сборка**
 - ❌ **Ошибка пайплайна**
 
-**Пример уведомления в Telegram:**
+**Пример уведомлений в Telegram:**
 
 ![Telegram Notification](screenshots/telegram-notification.png)
 
@@ -112,11 +114,11 @@ Jenkins-пайплайн отправляет уведомления в Telegram
 
 **Пример отчета (Тест пройден успешно):**
 
-![Allure Overview](screenshots/allure1.png)
+![allure1](screenshots/allure1.png)
 
 **Пример отчета (Тест упал):**
 
-![Allure Request](screenshots/allure2.png)
+![allure2](screenshots/allure2.png)
 
 ---
 
