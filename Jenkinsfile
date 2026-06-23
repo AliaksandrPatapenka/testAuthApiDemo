@@ -44,7 +44,7 @@ pipeline {
                             sh """
                                 curl -s -X POST "https://api.telegram.org/bot${TOKEN}/sendMessage" \
                                 -d "chat_id=-1004366972797" \
-                                -d "text=🚀 Сборка #${BUILD_NUMBER} [${JOB_NAME}] запущена. Ветка: ${env.BRANCH_NAME}. Запустил: ${env.BUILD_USER}.  Ссылка: <code>${buildUrl}</code>" \
+                                -d "text=🚀 <b>Сборка запущена</b>\n Сборщик: <code>[${JOB_NAME}]</code>\n  Номер сборки: <code>${BUILD_NUMBER}</code>\n Ветка: <code>${env.BRANCH_NAME}</code>\n Запустил: <code>${env.BUILD_USER}</code>\n  Ссылка: <code>${buildUrl}</code>" \
                                 -d "parse_mode=HTML"
                             """
 
