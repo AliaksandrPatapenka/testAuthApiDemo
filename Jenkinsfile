@@ -80,6 +80,7 @@ pipeline {
                             // 3.4. Генерация ALLURE-ОТЧЁТА
                             // --------------------------------------------
                             sh 'mvn allure:report'
+                            sh '1'
                         }
 
                     } catch (Exception e) {
