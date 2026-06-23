@@ -6,6 +6,7 @@ pipeline {
     // ====================================================
     parameters {
         string(name: 'BRANCH_NAME', defaultValue: 'master', description: 'Название ветки. По умолчанию "master"')
+        string(name: 'REPO_URL', defaultValue: 'https://github.com/AliaksandrPatapenka/testAuthApiDemo', description: 'URL репозитория с кодом')
         choice(name: 'TEST_SUITE', choices: ['all', 'auth', 'users'], description: 'Пакет тестов. По умолчанию "all"')
         string(name: 'BASE_URL', defaultValue: 'https://api.escuelajs.co', description: 'Базовый URL API')
         string(name: 'BASE_PATHS', defaultValue: '/api/v1', description: 'Базовый путь API')
@@ -44,7 +45,7 @@ pipeline {
                             sh """
                                 curl -s -X POST "https://api.telegram.org/bot${TOKEN}/sendMessage" \
                                 -d "chat_id=-1004366972797" \
-                                -d "text=🚀 <b>Тесты ЗАПУЩЕНЫ!</b>\n\n      Тесты: <code>[${JOB_NAME}]</code>\n      Номер запуска: <code>${BUILD_NUMBER}</code>\n      Ветка: <code>${env.BRANCH_NAME}</code>\n      Запустил: <code>${env.BUILD_USER}</code>\n\n<code>${buildUrl}</code>" \
+                                -d "text=🚀 <b>Тесты ЗАПУЩЕНЫ!</b>\n\n      Тесты: <code>[${JOB_NAME}]</code>\n      Номер запуска: <code>${BUILD_NUMBER}</code>\n      Проект: <code>${REPO_URL}</code>\n      Ветка: <code>${env.BRANCH_NAME}</code>\n      Запустил: <code>${env.BUILD_USER}</code>\n\n<code>${buildUrl}</code>" \
                                 -d "parse_mode=HTML"
                             """
 
@@ -52,7 +53,7 @@ pipeline {
                             // 3.2. Клонирование ВЫБРАННОЙ ВЕТКИ
                             // --------------------------------------------
                             git branch: "${params.BRANCH_NAME}",
-                                url: 'https://github.com/AliaksandrPatapenka/testAuthApiDemo'
+                                url: '${params.REPO_URL}'
 
                             // --------------------------------------------
                             // 3.3. ЗАПУСК ТЕСТОВ с параметрами
