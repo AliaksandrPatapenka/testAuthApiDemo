@@ -47,7 +47,7 @@ pipeline {
                             sh """
                                 curl -s -X POST "https://api.telegram.org/bot${TOKEN}/sendMessage" \
                                 -d "chat_id=-1004366972797" \
-                                -d "text=🚀 Тесты <b>ЗАПУЩЕНЫ!</b>\n      Тесты: <code>[${JOB_NAME}]</code>\n      Номер запуска: <code>${BUILD_NUMBER}</code>\n     Проект: <code>${repoName}</code>\n      Ветка: <code>${env.BRANCH_NAME}</code>\n      Запустил: <code>${env.BUILD_USER}</code>\n\n<code>${buildUrl}</code>" \
+                                -d "text=🚀 Тесты <b>ЗАПУЩЕНЫ!</b>\n       -\n       Проект: <code>${repoName}</code>\n       Ветка: <code>${env.BRANCH_NAME}</code>\n       -\n       Тесты: <code>[${JOB_NAME}]</code>\n       Номер запуска: <code>${BUILD_NUMBER}</code>\n       Запустил: <code>${env.BUILD_USER}</code>\n\n<code>${buildUrl}</code>" \
                                 -d "parse_mode=HTML"
                             """
 
@@ -94,7 +94,7 @@ pipeline {
                             sh """
                                 curl -s -X POST "https://api.telegram.org/bot${TOKEN}/sendMessage" \
                                 -d "chat_id=-1004366972797" \
-                                -d "text=❌ Сборка #${BUILD_NUMBER} [${JOB_NAME}] УПАЛА! Ссылка: <code>${buildUrl}</code>" \
+                                -d "text=❌ Тесты <b>НЕ ЗАПУСТИЛИСЬ</b>!        -\n       Проект: <code>${repoName}</code>\n       Ветка: <code>${env.BRANCH_NAME}</code>\n       -\n       Тесты: <code>[${JOB_NAME}]</code>\n       Номер запуска: <code>${BUILD_NUMBER}</code>\n       Запустил: <code>${env.BUILD_USER}</code>\n\n<code>${buildUrl}</code>" \
                                 -d "parse_mode=HTML"
                             """
                         }
@@ -106,11 +106,11 @@ pipeline {
                     // --------------------------------------------
                     withCredentials([string(credentialsId: 'telegram.token', variable: 'TOKEN')]) {
                         def statusIcon = testsFailed ? "⚠️" : "✅"
-                        def statusText = testsFailed ? "НЕСТАБИЛЬНА (тесты упали)" : "УСПЕШНА"
+                        def statusText = testsFailed ? "Тесты <b>УПАЛИ!</b>)" : "Тесты отработали <b>УСПЕШНО!</b>"
                         sh """
                             curl -s -X POST "https://api.telegram.org/bot${TOKEN}/sendMessage" \
                             -d "chat_id=-1004366972797" \
-                            -d "text=${statusIcon} Сборка #${BUILD_NUMBER} [${JOB_NAME}] ${statusText}. Ссылка: <code>${buildUrl}</code>" \
+                            -d "text=${statusIcon} ${statusText}\n       -\n       Проект: <code>${repoName}</code>\n       Ветка: <code>${env.BRANCH_NAME}</code>\n       -\n       Тесты: <code>[${JOB_NAME}]</code>\n       Номер запуска: <code>${BUILD_NUMBER}</code>\n       Запустил: <code>${env.BUILD_USER}</code>\n\n<code>${buildUrl}</code>" \
                             -d "parse_mode=HTML"
                         """
                     }
