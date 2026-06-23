@@ -30,20 +30,21 @@ pipeline {
             steps {
                 script {
                     def buildUrl = "http://localhost:8080/job/${JOB_NAME}/${BUILD_NUMBER}/"
+                    def repoName = params.REPO_URL.tokenize('/')[-1].replace('.git', '')
                     boolean testsFailed = false
 
                     try {
                         withCredentials([
-                            string(credentialsId: 'telegram.token', variable: 'TOKEN'),
-                            usernamePassword(credentialsId: 'user-credentials',
-                                             usernameVariable: 'USERNAME',
-                                             passwordVariable: 'PASSWORD')
+                                string(credentialsId: 'telegram.token', variable: 'TOKEN'),
+                                usernamePassword(credentialsId: 'user-credentials',
+                                        usernameVariable: 'USERNAME',
+                                        passwordVariable: 'PASSWORD')
                         ]) {
                             // --------------------------------------------
                             // 3.1. Уведомление о СТАРТЕ сборки
                             // --------------------------------------------
-                            def repoName = params.REPO_URL.tokenize('/')[-1].replace('.git', '')
 
+                            // TODO: перенести отправку сообщений в тг в отдельную библиотеку , когда проект разрастётся
                             sh """
                                 curl -s -X POST "https://api.telegram.org/bot${TOKEN}/sendMessage" \
                                 -d "chat_id=-1004366972797" \
@@ -55,7 +56,7 @@ pipeline {
                             // 3.2. Клонирование ВЫБРАННОЙ ВЕТКИ
                             // --------------------------------------------
                             git branch: "${params.BRANCH_NAME}",
-                                url: "${params.REPO_URL}"
+                                    url: "${params.REPO_URL}"
 
                             // --------------------------------------------
                             // 3.3. ЗАПУСК ТЕСТОВ с параметрами
@@ -77,6 +78,14 @@ pipeline {
                                 testsFailed = true
                                 currentBuild.result = 'UNSTABLE'
                                 echo "Error in test execution: ${e.message}"
+                                withCredentials([string(credentialsId: 'telegram.token', variable: 'TOKEN')]) {
+                                    sh """
+                                curl -s -X POST "https://api.telegram.org/bot${TOKEN}/sendMessage" \
+                                -d "chat_id=-1004366972797" \
+                                -d "text=❌ Тесты <b>НЕ ЗАПУСТИЛИСЬ</b>!        -\n       Проект: <code>${repoName}</code>\n       Ветка: <code>${env.BRANCH_NAME}</code>\n       -\n       Тесты: <code>[${JOB_NAME}]</code>\n       Номер запуска: <code>${BUILD_NUMBER}</code>\n       Запустил: <code>${env.BUILD_USER}</code>\n\n<code>${buildUrl}</code>" \
+                                -d "parse_mode=HTML"
+                            """
+                                }
                             }
 
                             // --------------------------------------------
@@ -106,7 +115,7 @@ pipeline {
                     // --------------------------------------------
                     withCredentials([string(credentialsId: 'telegram.token', variable: 'TOKEN')]) {
                         def statusIcon = testsFailed ? "⚠️" : "✅"
-                        def statusText = testsFailed ? "Тесты <b>УПАЛИ!</b>)" : "Тесты отработали <b>УСПЕШНО!</b>"
+                        def statusText = testsFailed ? "Тесты <b>УПАЛИ!</b>" : "Тесты отработали <b>УСПЕШНО!</b>"
                         sh """
                             curl -s -X POST "https://api.telegram.org/bot${TOKEN}/sendMessage" \
                             -d "chat_id=-1004366972797" \
@@ -125,12 +134,12 @@ pipeline {
     post {
         always {
             publishHTML([
-                allowMissing: true,
-                alwaysLinkToLastBuild: true,
-                keepAll: true,
-                reportDir: 'target/site/allure-maven-plugin',
-                reportFiles: 'index.html',
-                reportName: 'Allure Report'
+                    allowMissing         : true,
+                    alwaysLinkToLastBuild: true,
+                    keepAll              : true,
+                    reportDir            : 'target/site/allure-maven-plugin',
+                    reportFiles          : 'index.html',
+                    reportName           : 'Allure Report'
             ])
         }
     }
