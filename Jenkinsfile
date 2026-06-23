@@ -5,8 +5,8 @@ pipeline {
     // 1. ПАРАМЕТРЫ СБОРКИ
     // ====================================================
     parameters {
-        string(name: 'BRANCH_NAME', defaultValue: 'master', description: 'Название ветки. По умолчанию "master"')
         string(name: 'REPO_URL', defaultValue: 'https://github.com/AliaksandrPatapenka/testAuthApiDemo', description: 'URL репозитория с кодом')
+        string(name: 'BRANCH_NAME', defaultValue: 'master', description: 'Название ветки. По умолчанию "master"')
         choice(name: 'TEST_SUITE', choices: ['all', 'auth', 'users'], description: 'Пакет тестов. По умолчанию "all"')
         string(name: 'BASE_URL', defaultValue: 'https://api.escuelajs.co', description: 'Базовый URL API')
         string(name: 'BASE_PATHS', defaultValue: '/api/v1', description: 'Базовый путь API')
@@ -42,10 +42,12 @@ pipeline {
                             // --------------------------------------------
                             // 3.1. Уведомление о СТАРТЕ сборки
                             // --------------------------------------------
+                            def repoName = params.REPO_URL.tokenize('/')[-1].replace('.git', '')
+
                             sh """
                                 curl -s -X POST "https://api.telegram.org/bot${TOKEN}/sendMessage" \
                                 -d "chat_id=-1004366972797" \
-                                -d "text=🚀 <b>Тесты ЗАПУЩЕНЫ!</b>\n\n      Тесты: <code>[${JOB_NAME}]</code>\n      Номер запуска: <code>${BUILD_NUMBER}</code>\n      Проект: <code>${REPO_URL}</code>\n      Ветка: <code>${env.BRANCH_NAME}</code>\n      Запустил: <code>${env.BUILD_USER}</code>\n\n<code>${buildUrl}</code>" \
+                                -d "text=🚀 Тесты <b>ЗАПУЩЕНЫ!</b>\n      Тесты: <code>[${JOB_NAME}]</code>\n      Номер запуска: <code>${BUILD_NUMBER}</code>\n     "text Проект: <code>${REPO_NAME}</code>"\n      Ветка: <code>${env.BRANCH_NAME}</code>\n      Запустил: <code>${env.BUILD_USER}</code>\n\n<code>${buildUrl}</code>" \
                                 -d "parse_mode=HTML"
                             """
 
