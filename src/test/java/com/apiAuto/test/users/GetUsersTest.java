@@ -25,7 +25,7 @@ public class GetUsersTest {
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     class PositiveTests {
         @Test
-        @DisplayName("Case2.1: Получение списка пользователей")
+        @DisplayName("Case 2.1: Получение списка пользователей")
         void userList() {
             Response createResponse = UserCreateTemplate.userCreateTemplate();
             int userId = createResponse.jsonPath().getInt("id");

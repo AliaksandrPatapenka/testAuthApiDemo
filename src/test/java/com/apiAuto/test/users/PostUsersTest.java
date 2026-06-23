@@ -28,7 +28,7 @@ public class PostUsersTest {
     class PositiveTests {
 
         @Test
-        @DisplayName("Case1.1: Создание пользователя")
+        @DisplayName("Case 1.1: Создание пользователя")
         void userCreate() {
             String timeIndex = TestDataGenerator.timeIndex();
             UserCreate userCreate = new UserCreate();

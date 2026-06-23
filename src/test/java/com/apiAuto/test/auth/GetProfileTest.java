@@ -25,7 +25,7 @@ public class GetProfileTest {
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     public class PositiveTests {
         @Test
-        @DisplayName("Case8.1: Переход в профиль пользователя")
+        @DisplayName("Case 8.1: Переход в профиль пользователя")
         void userProfile() {
             String userEmailLogin = UserData.USER_EMAIL;
             String userPasswordLogin = UserData.USER_PASSWORD;
@@ -56,7 +56,7 @@ public class GetProfileTest {
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     public class NegativeTests {
         @Test
-        @DisplayName("Case8.1: Ответ 401 при переходе в профиль пользователя")
+        @DisplayName("Case 8.1: Ответ 401 при переходе в профиль пользователя")
         void incorrectProfile() {
             given(requestSpec())
                     .when()

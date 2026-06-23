@@ -75,8 +75,9 @@ mvn clean test; allure generate target/allure-results --clean -o allure-report; 
 Проект интегрирован с Jenkins. Пайплайн (`Jenkinsfile`) поддерживает параметризированную сборку:
 
 **Параметры сборки:**
-- `BRANCH_NAME` — ветка репозитория (по умолчанию `master`)
-- `TEST_SUITE` — пакет тестов (`all`, `auth`, `users`)
+- `REPO_URL` — ссылка на тестируемый репозиторий репозитория
+- `BRANCH_NAME` — ветка тестируемого репозитория
+- `TEST_SUITE` — пакет тестов
 - `BASE_URL` — базовый URL API
 - `BASE_PATHS` — базовый путь API
 - `USER_EMAIL` — email для авторизации (подставляется из Jenkins Credentials)
@@ -86,25 +87,20 @@ mvn clean test; allure generate target/allure-results --clean -o allure-report; 
 
 ![Jenkins Build Page](screenshots/jenkins-build-page.png)
 
-**Особенности:**
-- Автоматическое уведомление в Telegram о старте, результате и статусе сборки
-- Использование Jenkins Credentials для безопасного хранения логина/пароля и Telegram-токена
-- Публикация Allure-отчета на Jenkins
-
 ---
 
 ## Telegram-уведомления
 
 Jenkins-пайплайн отправляет уведомления в Telegram о статусе сборки:
 
-- 🚀 **Старт сборки**
-- ✅ **Успешная сборка**
-- ⚠️ **Нестабильная сборка**
-- ❌ **Ошибка пайплайна**
+- 🚀 Тесты **ЗАПУШЕНЫ!**
+- ✅ Тесты отработали **УСПЕШНО!**
+- ⚠️ Тесты **УПАЛИ!**
+- ❌ Тесты **НЕ ЗАПУСТИЛИСЬ!**
 
 **Пример уведомлений в Telegram:**
 
-![Telegram Notification](screenshots/telegram-notification.png)
+![Telegram Notification](screenshots/t1.png)
 
 ---
 
@@ -114,7 +110,7 @@ Jenkins-пайплайн отправляет уведомления в Telegram
 
 **Пример отчета (Тест пройден успешно):**
 
-![allure1](screenshots/allure1.png)
+![allure1](screenshots/allure1.png) 
 
 **Пример отчета (Тест упал):**
 

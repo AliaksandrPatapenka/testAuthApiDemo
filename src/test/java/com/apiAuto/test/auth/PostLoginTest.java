@@ -26,7 +26,7 @@ public class PostLoginTest {
     public class PositiveTests {
         @Test
         @Order(1)
-        @DisplayName("Case6.1: Авторизация пользователя")
+        @DisplayName("Case 6.1: Авторизация пользователя")
         void userLogin() {
             UserLogin user = new UserLogin();
             user.setEmail(UserData.USER_EMAIL);
@@ -52,7 +52,7 @@ public class PostLoginTest {
     public class NegativeTests {
         @Test
         @Order(1)
-        @DisplayName("Case6.1: Неверный логин пользователя")
+        @DisplayName("Case 6.1: Неверный логин пользователя")
         void incorrectEmail() {
             String userEmailLogin = UserData.NON_EXISTENT_EMAIL;
             String userPasswordLogin = UserData.USER_PASSWORD;
@@ -65,7 +65,7 @@ public class PostLoginTest {
 
         @Test
         @Order(2)
-        @DisplayName("Case2: Неверный пароль пользователя")
+        @DisplayName("Case 6.2: Неверный пароль пользователя")
         void incorrectPassword() {
             String userEmailLogin = UserData.USER_EMAIL;
             String userPasswordLogin = UserData.INVALID_PASSWORD;

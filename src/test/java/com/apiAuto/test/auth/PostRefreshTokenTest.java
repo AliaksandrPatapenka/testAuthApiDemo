@@ -28,7 +28,7 @@ public class PostRefreshTokenTest {
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     public class PositiveTests {
         @Test
-        @DisplayName("Case7.1: Обновление токена")
+        @DisplayName("Case 7.1: Обновление токена")
         void userRefreshToken() {
             String userEmailLogin = UserData.USER_EMAIL;
             String userPasswordLogin = UserData.USER_PASSWORD;
@@ -62,7 +62,7 @@ public class PostRefreshTokenTest {
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     public class NegativeTests {
         @Test
-        @DisplayName("Case7.1: Ошибка обновления токена(пустое тело запроса)")
+        @DisplayName("Case 7.1: Ошибка обновления токена(пустое тело запроса)")
         void incorrectRefreshToken() {
             given(requestSpec()).body("{}")
                     .when()
